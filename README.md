@@ -7,4 +7,4 @@ Code for our DCSP project
 2. Paste the folder into your XAMPP mysql data folder (xampp\mysql\data)
 3. Run XAMPP with Apache and MySQL and you should be able to reach the db using php and the port given in the XAMPP control panel.
 
-
+- Later once real server is running the folder will be saved in var/lib/mysql
