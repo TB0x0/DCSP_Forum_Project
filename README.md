@@ -1,5 +1,17 @@
-## DCSP_Forum_Project
-Code for our DCSP project
+- [x] Database prototyping
+- [x] Database design and implementation 
+- [ ] Database utility functions
+- [ ] Front-end prototyping and function implementation
+- [ ] Home page
+- [ ] View detailed post and comments page
+- [ ] View inbox page
+- [ ] Search page
+
+
+
+
+
+
 
 # DB Build Instructions:
 
