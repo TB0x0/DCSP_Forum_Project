@@ -5,5 +5,5 @@ Code for our DCSP project
 
 1. Copy the dcsp_db folder from local repository (probably somewhere like Documents\GitHub\DCSP_Forum_Project)
 2. Paste the folder into your XAMPP htdocs folder 
-3. Run XAMPP with Apache and MySQL, create a new databse called dcsp_project_db in phpmyadmin, and then run the builddb.php file.
+3. Run XAMPP with Apache and MySQL, create a new database called dcsp_project_db in phpmyadmin, and then run the builddb.php file.
 
