@@ -44,34 +44,47 @@
 			if(isset($_POST['username'], $_POST['displayname'], $_POST['password'])){
                 //Check if the username is within the requirements.
                 if(preg_match('/^[a-zA-Z]*$/',$_POST['username']) && strlen($_POST['username']) > 5 && strlen($_POST['username']) <= 32){
-                    //Password requirements
-                    $uppercase = preg_match('@[A-Z]@', $_POST['password']); //Must have one uppercase
-                    $lowercase = preg_match('@[a-z]@', $_POST['password']); //Must have one lowercase
-                    $number    = preg_match('@[0-9]@', $_POST['password']); //Must have one number
-                    $specialChars = preg_match('@[^\W]@', $_POST['password']); //Must have one special character
-                    //True if the password does NOT comply with the requirements.
-                    if(!$uppercase || !$lowercase || !$number || !$specialChars || strlen($_POST['password']) > 32 || strlen($_POST['password']) < 8) {
-                        $errorVal = "Password must be between 8 and 32 characters and have at least one of each: uppercase, lowercase, number, special character.";
+                    //If the username is valid, check to see if it is already in use.
+                    $username = $_POST['username'];
+                    $query = "SELECT * FROM users WHERE username = '$username'";
+                    $result = $conn->query($query);
+                    $resultArr = $result->fetch_array();
+                    //If the name is already being used, display the error. Else, continue checking the input.
+                    if($resultArr['username'] == $username){
+                        $errorVal = "That username is already taken.";
                         $userVal = $_POST['username'];
                         $displayVal = $_POST['displayname'];
                         $passVal = $_POST['password'];
                     } else {
-                        //If the password is within requirements, check the display name.
-                        if(preg_match('/^[a-zA-Z0-9_-]*$/',$_POST['displayname']) && strlen($_POST['displayname']) > 5 && strlen($_POST['displayname']) <= 32){
-                            //All entries good
-                            $password = $_POST['password'];
-                            $token = (hash('ripemd128', "$sal1$password$sal2"));
-                            db_add_user($conn, $_POST['username'], "user", $_POST['displayname'], $token);
-                            //Forward the user to log in.
-                            echo "Account created, redirecting you to log in.";
-                            header("refresh:3; url=login.php");
-                        } else {
-                            $errorVal = "Display name may only be 6-32 letters, numbers, underscores, and hyphens.";
+                        //Password requirements
+                        $uppercase = preg_match('@[A-Z]@', $_POST['password']); //Must have one uppercase
+                        $lowercase = preg_match('@[a-z]@', $_POST['password']); //Must have one lowercase
+                        $number    = preg_match('@[0-9]@', $_POST['password']); //Must have one number
+                        $specialChars = preg_match('@[^\W]@', $_POST['password']); //Must have one special character
+                        //True if the password does NOT comply with the requirements.
+                        if(!$uppercase || !$lowercase || !$number || !$specialChars || strlen($_POST['password']) > 32 || strlen($_POST['password']) < 8) {
+                            $errorVal = "Password must be between 8 and 32 characters and have at least one of each: uppercase, lowercase, number, special character.";
                             $userVal = $_POST['username'];
                             $displayVal = $_POST['displayname'];
                             $passVal = $_POST['password'];
+                        } else {
+                            //If the password is within requirements, check the display name.
+                            if(preg_match('/^[a-zA-Z0-9_-]*$/',$_POST['displayname']) && strlen($_POST['displayname']) > 5 && strlen($_POST['displayname']) <= 32){
+                                //All entries good
+                                $password = $_POST['password'];
+                                $token = (hash('ripemd128', "$sal1$password$sal2"));
+                                db_add_user($conn, $_POST['username'], "user", $_POST['displayname'], $token);
+                                //Forward the user to log in.
+                                echo "Account created, redirecting you to log in.";
+                                header("refresh:3; url=login.php");
+                            } else {
+                                $errorVal = "Display name may only be 6-32 letters, numbers, underscores, and hyphens.";
+                                $userVal = $_POST['username'];
+                                $displayVal = $_POST['displayname'];
+                                $passVal = $_POST['password'];
+                            }
                         }
-                    }
+                    }                  
                 } else {
                     $errorVal = "Username must be 6-32 upper and lowercase letters only.";
                     $userVal = $_POST['username'];
