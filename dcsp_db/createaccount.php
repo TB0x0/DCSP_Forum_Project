@@ -2,7 +2,12 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>Create an account</title>
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
         <style>
             input {
                 margin-bottom: 0.5em;
@@ -20,7 +25,7 @@
 				die($conn->connect_error);
 		?>
     </head>
-    <body>
+    <body style="background-color: #bfc9ca">
         <?php
             $sal1 = "zx&h^"; 
             $sal2 = "qp%@&";
@@ -96,6 +101,21 @@
 			}
 		}
         ?>
+        <div class="container-fullwidth">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="main.php">DCSP Forum</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="main.php">Home <span class="sr-only">(current)</span></a>
+                </li>
+            </div>
+            </nav>
+        </div>
+        <div class="text-center container" style="background-color: #abb2b9">
         <h1>Create an account on the <span style="font-style:italic; font-weight:bold; color: maroon">
                 DCSP Forum</span>!</h1>
                 
@@ -116,5 +136,13 @@
         <p style="font-style:italic">
             <a href="login.php">Already have an account? Log in.</a>
         </p>
+        </div>
 	</body>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="bootstrap/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </html>

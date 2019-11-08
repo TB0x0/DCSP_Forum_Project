@@ -2,11 +2,29 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>Log in to Website</title>
+
+        <!-- Bootstrap CSS -->
+        <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
         <style>
             input {
                 margin-bottom: 0.5em;
             }
+
+            .dcsp-center{
+                width: 25%;
+                height: 60%;
+                position: absolute;
+                top:10%;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: auto;
+            }   
+
+
         </style>
         <?php 
             require_once('dbfuncs/dbfunctions.php');
@@ -20,7 +38,7 @@
 				die($conn->connect_error);
 		?>
     </head>
-    <body>
+    <body style="background-color: #bfc9ca">
         <?php
             $sal1 = "zx&h^"; 
             $sal2 = "qp%@&";
@@ -50,7 +68,7 @@
                 //If the username is in the database, the first part will be 1. 0 otherwise.
                 //For the password, hash the password provided and compare it to the hashed password in the database.
 				if($userInfo['username'] == $username && $userInfo['password'] == (hash('ripemd128', "$sal1$password$sal2"))){
-					$displayName = $userInfo['display_name'];
+					$displayName = $userInfo['username']; //****THIS WAS CHANGED TO USERNAME TO FIX ISSUE WITH CREATE POST****
                     $status = $userInfo['status'];
                     //Creadt session variables to keep track of the user's display name and status
 					$_SESSION['currentUser'] = $displayName;
@@ -68,23 +86,46 @@
 			}
 		}
         ?>
-        <h1>Welcome to <span style="font-style:italic; font-weight:bold; color: maroon">
-                DCSP Forum</span>!</h1>
-                
-        <p style="color: red">
-        <?=$errorVal?>
-        </p>
-        
-        <form method="post" action="login.php">
-            <label>Username: </label>
-            <input type="text" name="username" value="<?=$userVal?>"> <br>
-            <label>Password: </label>
-            <input type="password" name="password" value="<?=$passVal?>"> <br>
-            <input type="submit" name="submit" value="Log in">
-        </form>
-        
-        <p style="font-style:italic">
-            <a href="createaccount.php">Create account</a>
-        </p>
+        <div class="container-fullwidth">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="main.php">DCSP Forum</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="main.php">Home <span class="sr-only">(current)</span></a>
+                </li>
+            </div>
+            </nav>
+        </div>
+        <div class="text-center container" style="background-color: #abb2b9">
+            <h1>Welcome to <span style="font-style:italic; font-weight:bold; color: maroon">
+                    DCSP Forum</span>!</h1>
+                    
+            <p style="color: red">
+            <?=$errorVal?>
+            </p>
+            
+            <form class="form-signin" method="post" action="login.php">
+                <label>Username: </label>
+                <input type="text" name="username" value="<?=$userVal?>"> <br>
+                <label>Password: </label>
+                <input type="password" name="password" value="<?=$passVal?>"> <br>
+                <input type="submit" name="submit" value="Log in">
+            </form>
+            
+            <p style="font-style:italic">
+                <a href="createaccount.php">Create account</a>
+            </p>
+        </div>
 	</body>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="bootstrap/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
 </html>

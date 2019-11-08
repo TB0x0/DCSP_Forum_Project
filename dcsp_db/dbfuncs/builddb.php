@@ -19,8 +19,9 @@
     post_id INT AUTO_INCREMENT,
     username VARCHAR(32) REFERENCES users(username),
     post_title VARCHAR(64) NOT NULL,
+    contents VARCHAR(500) NOT NULL,
+    category VARCHAR(64) NOT NULL,
     date DATE NOT NULL,
-    url VARCHAR(128) NOT NULL UNIQUE,
     PRIMARY KEY (post_id)
     )";
     $result = $connection->query($create_posts_table);

@@ -48,14 +48,14 @@
   <body style="background-color: #bfc9ca">
     <div class="container-fullwidth">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">DCSP Forum</a>
+        <a class="navbar-brand" href="main.php">DCSP Forum</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav">
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            <li class="nav-item">
+                <a class="nav-link" href="main.php">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="createpost.php">New Post</a>
@@ -91,58 +91,21 @@
                 <div class="container-fullwidth border border-dark border-3 p-3">
 
                     <?php
-                        foreach($categories as $category){
+                        $postID = $_GET['post_id'];
+                        $query = "SELECT * FROM posts WHERE post_id = '$postID'";
+                        $result = $conn->query($query);
+                        if($result){
+                            $resultArr = $result->fetch_array();
+                            
                             echo "<div class=\"row border border-dark border-3 rounded pt-3 pb-3\" style=\"background-color: #171717\">
-                            <div class=\"col-md-3\">
-                                <h3 class=\"dcsp-text-light\">$category</h3>
-                            </div>
-                            <div class=\"col-md-6\"></div>
-                            <div class=\"col-md-3\">";
+                            <div class=\"col-md-12\">
+                                <h3 class=\"dcsp-text-light\">" . $resultArr['post_title'] . "</h3>
+                            </div></div>";
                             
-                            $query = "SELECT * FROM posts WHERE category = '$category'";
-                            $result = $conn->query($query);
-                            if($result){
-                                $resultArr = $result->fetch_array();
-                                $row_cnt = $result->num_rows;
-                                echo "<p class=\"text-right dcsp-text-light\">" . $row_cnt . " posts</p></div></div>";
-                            } else {
-                                echo "<p class=\"text-right dcsp-text-light\">No posts</p></div></div>";
-                            }
-                            
-                                
-
-                            $query = "SELECT * FROM posts WHERE category = '$category'";
-                            $result = $conn->query($query);
-
-                            if($result){
-                                $tmpVal = 0;
-                                while(($resultArr = $result->fetch_array()) && $tmpVal < 5){
-                                    echo "<div class=\"row border border-dark border-3 rounded ml-3 mr-3 pt-3 pb-3\" style=\"background-color: #bbbbbb\">
-                                    <div class=\"col-md-6\">";
-                                        $postID = $resultArr['post_id'];
-                                        echo "<a href=\"post.php?post_id=" . $postID . "\" class=\"text-info text-truncate stretched-link\" style=\"font-family: 'Roboto', sans-serif; font-size: 20px;\">" . $resultArr['post_title'] . "</a>";
-                                    echo "</div>
-                                    <div class=\"col-md-2\">";
-                                        echo $resultArr['username'];
-                                    echo "</div>
-                                    <div class=\"col-md-2\">";
-                                        echo $resultArr['date'];
-                                    echo "</div>
-                                    <div class=\"col-md-2\">";
-                                        $postTitle = $resultArr['post_title'];
-                                        $queryComments = "SELECT * FROM comments WHERE post_title = '$postTitle'";
-                                        $resultComments = $conn->query($queryComments);
-                                        echo $resultComments->num_rows;
-                                    echo "</div>
-                                    </div>";
-
-                                    $tmpVal += 1;
-                                }
-                            }
-                            
-                            
-                        }
-
+                            echo "<div class=\"row border border-dark border-3 rounded ml-3 mr-3 pt-3 pb-3\" style=\"background-color: #bbbbbb\">
+                            <div class=\"col-md-12\">";
+                            echo "<p>" . $resultArr['contents'] . "</p></div></div>";
+                        }    
                     ?>                 
                             
                     
