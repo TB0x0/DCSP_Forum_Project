@@ -2,7 +2,7 @@
 - [x] Database design and implementation 
 - [ ] Database utility functions
 - [ ] Front-end prototyping and function implementation
-- [ ] Home page
+- [x] Home page
 - [ ] View detailed post and comments page
 - [ ] View inbox page
 - [ ] Search page
