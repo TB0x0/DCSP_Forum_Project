@@ -11,8 +11,8 @@ function db_add_post($connection, $un, $pt, $cn, $ct){
     $result = $connection->query($insert_into_posts);
     if (!$result) die($connection->error);}
 
-function db_add_comment($connection, $cid, $pt, $un, $ti, $cn){
-    $insert_into_comments = "INSERT INTO comments (post_title, username, time, contents)"."VALUES('$pt','$un','$ti', '$cn')";
+function db_add_comment($connection, $pi, $un, $cn){
+    $insert_into_comments = "INSERT INTO comments (post_id, username, time, contents)"."VALUES('$pi','$un',UTC_TIMESTAMP, '$cn')";
     $result = $connection->query($insert_into_comments);
     if (!$result) die($connection->error);}
     

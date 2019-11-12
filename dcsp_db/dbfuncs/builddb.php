@@ -30,7 +30,7 @@
 
     $create_comments_table = "CREATE TABLE comments (
     comment_id INT AUTO_INCREMENT,
-    post_title VARCHAR(64) REFERENCES posts(post_title),
+    post_id INT REFERENCES posts(post_id),
     username VARCHAR(32) REFERENCES users(username),
     time DATETIME NOT NULL,
     contents varchar(500),
