@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
-    <title>DCSP Forum</title>
 
     <?php
         session_start();
@@ -19,11 +18,14 @@
         if(isset($_SESSION['currentUserType'])){
             if ($_SESSION['currentUserType'] == "admin"){
                 $loggedin = true;
+                $admin = true;
             } else if($_SESSION['currentUserType'] == "user") {
                 $loggedin = true;
+                $admin = false;
             }
         } else {
             $loggedin = false;
+            $admin = false;
         }
         unset($_SESSION['postID']);
         $conn = new mysqli($hn, $un, $pw, $db);
@@ -65,7 +67,7 @@
                 <a class="nav-link" href="#">Lorum Ipsum</a>
             </li>
             <?php
-                if($loggedin){
+                if($loggedin && !$admin){
                     echo "<li class=\"nav-item dropdown\">
                     <a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"navbarDropdownMenuLink\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">
                     Account
@@ -76,13 +78,24 @@
                     <a class=\"dropdown-item\" href=\"logout.php\">Log out</a>
                     </div>
                     </li>";
-                } else {
+                } else if ($loggedin && $admin) {
+                    echo "<li class=\"nav-item dropdown\">
+                    <a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"navbarDropdownMenuLink\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">
+                    Account
+                    </a>
+                    <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdownMenuLink\">
+                    <a class=\"dropdown-item\" href=\"#\">Edit Account</a>
+                    <a class=\"dropdown-item\" href=\"admin_page.php\">Ban User</a>
+                    <a class=\"dropdown-item\" href=\"logout.php\">Log out</a>
+                    </div>
+                    </li>";
+                }else {
                     echo "<li class=\"nav-item\">
                     <a class=\"nav-link\" href=\"login.php\">Log In/Create Account</a>
                     </li>";
                 }
             ?>
-            </ul> 
+            </ul>
         </div>
         <form class="navbar-form navbar-right" method="get" action="search.php">
             <div class="input-group">
