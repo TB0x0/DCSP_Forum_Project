@@ -3,7 +3,7 @@
 - [ ] Database utility functions
 - [ ] Front-end prototyping and function implementation
 - [x] Home page
-- [ ] View detailed post and comments page
+- [x] View detailed post and comments page
 - [ ] View inbox page
 - [ ] Search page
 
