@@ -21,9 +21,14 @@ function db_add_message($connection, $un, $au, $ti, $msg){
     $result = $connection->query($insert_into_messages);
     if (!$result) die($connection->error);}
 
-function db_edit_post_category($connection, $pi, $ct){
-    $update_post = "UPDATE posts SET category = '" .$ct. "' WHERE post_id = '" .$pi. "'";
-    $result = $connection->query($update_post);    
+function db_edit_contents($connection, $pi, $cn){
+    $contents = "UPDATE posts SET contents = '".$cn."' WHERE post_id = '" .$pi. "'";
+    $result = $connection->query($contents);
+    if (!$result) die($connection->error);}
+
+function db_edit_category($connection, $pi, $ct){
+    $category = "UPDATE posts SET category = '" .$ct. "' WHERE post_id = '" .$pi. "'";
+    $result = $connection->query($category);
     if (!$result) die($connection->error);}
 
 function db_edit_comment($connection, $ci, $cn){
