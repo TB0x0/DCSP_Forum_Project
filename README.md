@@ -1,6 +1,6 @@
 - [x] Database prototyping
 - [x] Database design and implementation 
-- [ ] Database utility functions
+- [x] Database utility functions
 - [ ] Front-end prototyping and function implementation
 - [x] Home page
 - [x] View detailed post and comments page
