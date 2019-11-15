@@ -26,6 +26,11 @@ function db_edit_post_category($connection, $pi, $ct){
     $result = $connection->query($update_post);    
     if (!$result) die($connection->error);}
 
+function db_edit_post_contents($connection, $pi, $cn){
+    $update_post = "UPDATE posts SET contents = '$cn' WHERE post_id = '$pi'";
+    $result = $connection->query($update_post);    
+    if (!$result) die($connection->error);}
+
 function db_edit_comment($connection, $ci, $cn){
     $update_comment = "UPDATE comments SET contents = '$cn' WHERE comment_id='$ci'";
     $result = $connection->query($update_comment); 
