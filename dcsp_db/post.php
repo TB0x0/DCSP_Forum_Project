@@ -85,7 +85,7 @@
         </div>
         <form class="navbar-form navbar-right" method="get" action="search.php">
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search Posts">
+                <input type="text" class="form-control" name="search_var" placeholder="Search Posts">
                 <div class="input-group-btn">
                 <button class="btn btn-default btn-light" type="submit">
                     <i class="fa fa-search"></i>

@@ -84,9 +84,9 @@
             ?>
             </ul>
         </div>
-        <form class="navbar-form navbar-right" method="get" action="search.php">
+       <form class="navbar-form navbar-right" method="get" action="search.php">
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search Posts">
+                <input type="text" class="form-control" name="search_var" placeholder="Search Posts">
                 <div class="input-group-btn">
                 <button class="btn btn-default btn-light" type="submit">
                     <i class="fa fa-search"></i>
@@ -98,7 +98,35 @@
     </div>
     
     <?php
-        //db_edit_contents($conn, 1, 'EDIT TEST')
+        $srchvar = $_GET['search_var'];
+        $query = "SELECT * FROM posts WHERE post_title ='" .$srchvar. "' OR username = '" .$srchvar. "'";
+        $result = $conn->query($query);
+
+        if($result){
+            $tmpVal = 0;
+            while(($resultArr = $result->fetch_array()) && $tmpVal < 5){
+                echo "<div class=\"row border border-dark border-3 rounded ml-3 mr-3 pt-3 pb-3\" style=\"background-color: #bbbbbb\">
+                <div class=\"col-md-6\">";
+                    $postID = $resultArr['post_id'];
+                    echo "<a href=\"post.php?post_id=" . $postID . "\" class=\"text-info text-truncate stretched-link\" style=\"font-family: 'Roboto', sans-serif; font-size: 20px;\">" . $resultArr['post_title'] . "</a>";
+                echo "</div>
+                <div class=\"col-md-2\">";
+                    echo $resultArr['username'];
+                echo "</div>
+                <div class=\"col-md-2\">";
+                    echo $resultArr['date'];
+                echo "</div>
+                <div class=\"col-md-2\">";
+                    $postID = $resultArr['post_id'];
+                    $queryComments = "SELECT * FROM comments WHERE post_id = '$postID'";
+                    $resultComments = $conn->query($queryComments);
+                    echo $resultComments->num_rows;
+                echo "</div>
+                </div>";
+
+                $tmpVal += 1;
+            }
+        }
     ?>
     
     </body>
