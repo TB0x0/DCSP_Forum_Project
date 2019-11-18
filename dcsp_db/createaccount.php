@@ -33,8 +33,8 @@
             $sal2 = "qp%@&";
 			$errorVal = "";
             $userVal = "";
-            $displayVal = "";
-			$passVal = "";
+            $passVal = "";
+            $passagainVal = "";
             
         //Forward the user to the main page if they are logged in already.
         if(isset($_SESSION['currentUserType'])){
@@ -48,7 +48,7 @@
 
         
 		if(isset($_POST['submit'])){
-			if(isset($_POST['username'], $_POST['displayname'], $_POST['password'])){
+			if(isset($_POST['username'], $_POST['password'], $_POST['passwordagain'])){
                 //Check if the username is within the requirements.
                 if(preg_match('/^[a-zA-Z]*$/',$_POST['username']) && strlen($_POST['username']) > 5 && strlen($_POST['username']) <= 32){
                     //If the username is valid, check to see if it is already in use.
@@ -60,7 +60,7 @@
                     if($resultArr['username'] == $username){
                         $errorVal = "That username is already taken.";
                         $userVal = $_POST['username'];
-                        $displayVal = $_POST['displayname'];
+                        $passagainVal = $_POST['passwordagain'];
                         $passVal = $_POST['password'];
                     } else {
                         //Password requirements
@@ -72,22 +72,22 @@
                         if(!$uppercase || !$lowercase || !$number || !$specialChars || strlen($_POST['password']) > 32 || strlen($_POST['password']) < 8) {
                             $errorVal = "Password must be between 8 and 32 characters and have at least one of each: uppercase, lowercase, number, special character.";
                             $userVal = $_POST['username'];
-                            $displayVal = $_POST['displayname'];
+                            $passagainVal = $_POST['passwordagain'];
                             $passVal = $_POST['password'];
                         } else {
                             //If the password is within requirements, check the display name.
-                            if(preg_match('/^[a-zA-Z0-9_-]*$/',$_POST['displayname']) && strlen($_POST['displayname']) > 5 && strlen($_POST['displayname']) <= 32){
+                            if($_POST['password'] == $_POST['passwordagain']){
                                 //All entries good
                                 $password = $_POST['password'];
                                 $token = (hash('ripemd128', "$sal1$password$sal2"));
-                                db_add_user($conn, $_POST['username'], "user", $_POST['displayname'], $token);
+                                db_add_user($conn, $_POST['username'], "user", $token);
                                 //Forward the user to log in.
                                 echo "Account created, redirecting you to log in.";
                                 header("refresh:3; url=login.php");
                             } else {
-                                $errorVal = "Display name may only be 6-32 letters, numbers, underscores, and hyphens.";
+                                $errorVal = "Passwords do not match.";
                                 $userVal = $_POST['username'];
-                                $displayVal = $_POST['displayname'];
+                                $passagainVal = $_POST['passwordagain'];
                                 $passVal = $_POST['password'];
                             }
                         }
@@ -95,7 +95,7 @@
                 } else {
                     $errorVal = "Username must be 6-32 upper and lowercase letters only.";
                     $userVal = $_POST['username'];
-                    $displayVal = $_POST['displayname'];
+                    $passagainVal = $_POST['passwordagain'];
                     $passVal = $_POST['password'];
                 }
 		    } else {
@@ -128,10 +128,10 @@
         <form method="post" action="createaccount.php">
             <label>Username: </label>
             <input type="text" name="username" value="<?=$userVal?>"> <br>
-            <label>Display Name: </label>
-            <input type="text" name="displayname" value="<?=$displayVal?>"> <br>
             <label>Password: </label>
             <input type="password" name="password" value="<?=$passVal?>"> <br>
+            <label>Re-type Password: </label>
+            <input type="passwordagain" name="passwordagain" value="<?=$passagainVal?>"> <br>
             <input type="submit" name="submit" value="Create Account">
         </form>
         

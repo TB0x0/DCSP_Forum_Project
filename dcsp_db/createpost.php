@@ -30,7 +30,7 @@
 			if ($conn->connect_error)
                 die($conn->connect_error);
                 
-        $categories = array("Category1", "Category2", "Category3");
+        $categories = array("Questions", "General", "Off-Topic");
         
     ?>
 

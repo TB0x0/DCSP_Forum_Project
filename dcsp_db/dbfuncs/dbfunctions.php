@@ -1,8 +1,8 @@
 <?php
 // Use these functions to insert properties into the database dcsp_project_db
 
-function db_add_user($connection, $un, $st, $dn, $pw){
-    $insert_into_users  = "INSERT INTO users (username, status, display_name, password) ". "VALUES('$un', '$st', '$dn', '$pw')";
+function db_add_user($connection, $un, $st, $pw){
+    $insert_into_users  = "INSERT INTO users (username, status, password) ". "VALUES('$un', '$st', '$pw')";
     $result = $connection->query($insert_into_users);
     if (!$result) die($connection->error);}
 

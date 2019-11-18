@@ -7,7 +7,6 @@
     $create_users_table = "CREATE TABLE users (
     username VARCHAR(32) NOT NULL UNIQUE,
     status VARCHAR(15) NOT NULL,
-    display_name VARCHAR(32) NOT NULL,
     password VARCHAR(32) NOT NULL,
     PRIMARY KEY (username)
     )";
@@ -56,11 +55,10 @@
     $sal1    = "zx&h^"; $sal2    = "qp%@&";
     $username = 'admin';
     $status = 'admin';
-    $display_name = 'poqjwdpojqw';
     $password = 'password12';
     $token = hash('ripemd128', "$sal1$password$sal2");
 
-    db_add_user($connection, $username, $status, $display_name, $token);
+    db_add_user($connection, $username, $status, $token);
 
     $connection->close();
 ?>
