@@ -99,7 +99,7 @@
     <h3 text_align="center">Search Results</h3>
     <?php
         $srchvar = $_GET['search_var'];
-        $query = "SELECT * FROM posts WHERE post_title = '" .$srchvar. "' OR username = '" .$srchvar. "'";
+        $query = "SELECT * FROM posts WHERE post_title LIKE '%$srchvar%' OR username LIKE '%$srchvar%'";
         $result = $conn->query($query);
 
         if($result){
