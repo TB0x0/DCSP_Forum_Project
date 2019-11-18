@@ -136,7 +136,7 @@
                             
                                 
 
-                            $query = "SELECT * FROM posts WHERE category = '$category'";
+                            $query = "SELECT * FROM posts WHERE category = '$category' ORDER BY post_id DESC";
                             $result = $conn->query($query);
 
                             if($result){

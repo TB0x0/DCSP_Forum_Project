@@ -179,7 +179,7 @@
                         }
                     ?>
                     <?php
-                        $queryComm = "SELECT * FROM comments WHERE post_id = '$postID'";
+                        $queryComm = "SELECT * FROM comments WHERE post_id = '$postID' ORDER BY comment_id DESC";
                         $resultComm = $conn->query($queryComm);
                         if($resultComm){
                             while($resultArrComm = $resultComm->fetch_array()){
