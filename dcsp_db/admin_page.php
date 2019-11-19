@@ -109,9 +109,13 @@
                                 $errorVal = "User has been Banned";
                                 $userVal = $username;
                                 }
-                                else{
-                                $errorVal = "That user is already banned";
+                                else if ($resultArr['status'] == "admin"){
+                                $errorVal = "You can not Ban an Admin.";
                                 $userVal = $username;
+                                }
+                                else {
+                                    $errorVal = "That User is already Banned.";
+                                    $userVal = $username;
                                 }
                         }
                 }
