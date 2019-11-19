@@ -75,7 +75,7 @@
                     </a>
                     <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdownMenuLink\">
                     <a class=\"dropdown-item\" href=\"#\">Edit Account</a>
-                    <a class=\"dropdown-item\" href=\"admin_page.php\">Ban User</a>
+                    <a class=\"dropdown-item\" href=\"admin_page.php\">Admin Page</a>
                     <a class=\"dropdown-item\" href=\"logout.php\">Log out</a>
                     </div>
                     </li>";
@@ -141,6 +141,30 @@
                         }
                 }
             }
+            if(isset($_POST['add'])){
+                if(isset($_POST['username'])){
+                    $username = $_POST['username'];
+                    $query = "SELECT status FROM users WHERE username = '$username'";
+                    $result = $conn->query($query);
+                    $resultArr = $result->fetch_array();
+                        if(!$resultArr){
+                            $errorVal = "That username does not exist";
+                            $userVal = $username;
+                        }else{
+                            if($resultArr['status'] == "user")
+                                {
+                                $query = "UPDATE users SET status = 'admin' WHERE username = '$username'";
+                                $conn->query($query);
+                                $errorVal = "";
+                                $userVal = "";
+                                }
+                                else{
+                                $errorVal = "That user is already an admin.";
+                                $userVal = $username;
+                                }
+                        }
+                }
+            }
     ?>
     <form  method = "post" action = "admin_page.php" class = "text-center">
         <div class="text-center container" >
@@ -158,10 +182,13 @@
             </div>
             <div class = "row">
                 <div class = "col-md-6">
-                    <button type="submit" name = "ban" id = "ban" class="btn btn-danger btn-block">Submit Username to Ban</button>
+                    <button type="submit" name = "ban" id = "ban" class="btn btn-danger btn-block ">Submit Username to Ban</button>
                 </div>
                 <div class = "col-md-6">
                     <button type="submit" name = "unban" id = "unban" class="btn btn-success btn-block">Submit Username to Un-Ban</button>
+                </div>
+                <div class = "col-md-12">
+                    <button type="submit" name = "add" id = "add" class="btn btn-warning btn-block">Promote User to Admin</button>
                 </div>
             </div>
             <div class = "row">
