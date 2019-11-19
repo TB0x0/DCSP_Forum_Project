@@ -106,8 +106,8 @@
                                 {
                                 $query = "UPDATE users SET status = 'banned' WHERE username = '$username'";
                                 $conn->query($query);
-                                $errorVal = "";
-                                $userVal = "";
+                                $errorVal = "User has been Banned";
+                                $userVal = $username;
                                 }
                                 else{
                                 $errorVal = "That user is already banned";
@@ -131,8 +131,8 @@
                                 {
                                 $query = "UPDATE users SET status ='user' WHERE username = '$username'";
                                 $conn->query($query);
-                                $errorVal = "";
-                                $userVal = "";
+                                $errorVal = "User has been Un-Banned";
+                                $userVal = $username;
                                 }
                                 else{
                                 $errorVal = "That user is not currently banned";
@@ -155,8 +155,8 @@
                                 {
                                 $query = "UPDATE users SET status = 'admin' WHERE username = '$username'";
                                 $conn->query($query);
-                                $errorVal = "";
-                                $userVal = "";
+                                $errorVal = "User Promoted to Admin";
+                                $userVal = $username;
                                 }
                                 else{
                                 $errorVal = "That user is already an admin.";
@@ -170,7 +170,7 @@
         <div class="text-center container" >
             <div class = "row">
                 <div class = "col-md-12 text-center">
-                    <h3> Enter the username of the user you would like to ban</h3>
+                    <h3> Enter the Username Below</h3>
                 </div>
             </div>
             <div class = "row">
