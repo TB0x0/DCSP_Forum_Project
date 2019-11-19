@@ -115,24 +115,82 @@
                 <div class="container-fullwidth border border-dark border-3 p-3">
 
                     <?php
-                        if(!(isset($_SESSION['postID']))){
-                            $_SESSION['postID'] = $_GET['post_id'];
+                        if(isset($_GET['deletePost'])){
+                            $postID = $_SESSION['postID'];
+                            $queryDelComm = "SELECT * FROM comments WHERE post_id = '$postID'";
+                            $resultDelComm = $conn->query($queryDelComm);
+                            if($resultDelComm){
+                                while($resultArrDelComm = $resultDelComm->fetch_array()){
+                                    db_delete_comment($conn, $postID, $resultArrDelComm['comment_id']);
+                                }
+                                db_delete_post($conn, $postID);
+                                header("Location: main.php");
+                            }
                         }
-                        $postID = $_SESSION['postID'];
-                        $query = "SELECT * FROM posts WHERE post_id = '$postID'";
-                        $result = $conn->query($query);
-                        if($result){
-                            $resultArr = $result->fetch_array();
+                        if(isset($_GET['submitEdit'])){
+                            $postID = $_SESSION['postID'];
+                            $postErr = "";
+                            $postErrBool = false;
+                            $contents = "";
+                            if(isset($_GET['submitEdit'])){
+                                if(isset($_GET['postcontents'])){
+                                    if(preg_match('/^(.*)$/ms',$_GET['postcontents']) && !(ctype_space($_GET['postcontents'])) && strlen($_GET['postcontents']) > 5 && strlen($_GET['postcontents']) <= 500){
+                                        $postErr = "";
+                                        $postErrBool = false;
+                                        //Contents is good
                             
-                            echo "<div class=\"row border border-dark border-3 rounded pt-3 pb-3\" style=\"background-color: #171717\">
-                            <div class=\"col-md-12\">
-                                <h3 class=\"dcsp-text-light\">" . $resultArr['post_title'] . "</h3>
-                            </div></div>";
-                            
-                            echo "<div class=\"row border border-dark border-3 rounded ml-3 mr-3 pt-3 pb-3\" style=\"background-color: #bbbbbb\">
-                            <div class=\"col-md-12\">";
-                            echo "<p>" . $resultArr['contents'] . "</p></div></div>";
-                        }    
+                                        //ALL INFO IS GOOD, ADD THE POST AND FORWARD USER TO IT'S PAGE
+                                        db_edit_contents($conn, $postID, $_GET['postcontents']);
+                                        header("Location: post.php?post_id=$postID");
+                                        
+                                    } else {
+                                        $postErr = "Your post contents must be between 5 and 500 characters.";
+                                        $postErrBool = true;
+                                        $title = $_GET['posttitle'];
+                                        $contents = $_GET['postcontents'];
+                                    }
+                                }
+                            }
+                        }
+                        if(isset($_GET['editPost'])){
+                            $postID = $_SESSION['postID'];
+                            $query = "SELECT * FROM posts WHERE post_id = '$postID'";
+                            $result = $conn->query($query);
+                            if($result){
+                                $resultArr = $result->fetch_array();
+                            }
+                            echo "<form action=\"post.php\" method=\"get\">
+                                    <div class=\"row border border-dark border-3 rounded pt-3 pb-3\" style=\"background-color: #171717\">
+                                    <div class=\"col-md-12\">
+                                    <h3 class=\"dcsp-text-light\">" . $resultArr['post_title'] . "</h3>
+                                    </div></div>
+                                <div class=\"form-group\">
+                                    <label for=\"postcontents\">Contents: </label>
+                                    <textarea class=\"form-control\" name=\"postcontents\" id=\"postcontents\" rows=\"7\">" . $resultArr['contents'] . "</textarea>
+                                </div>
+                                <button type=\"submitEdit\" id=\"submitEdit\" name=\"submitEdit\" class=\"btn btn-primary\">Update Post</button>
+                            </form>";
+                        } else {
+                            if(!(isset($_SESSION['postID']))){
+                                $_SESSION['postID'] = $_GET['post_id'];
+                            }
+                            $postID = $_SESSION['postID'];
+                            $query = "SELECT * FROM posts WHERE post_id = '$postID'";
+                            $result = $conn->query($query);
+                            if($result){
+                                $resultArr = $result->fetch_array();
+                                
+                                echo "<div class=\"row border border-dark border-3 rounded pt-3 pb-3\" style=\"background-color: #171717\">
+                                <div class=\"col-md-12\">
+                                    <h3 class=\"dcsp-text-light\">" . $resultArr['post_title'] . "</h3>
+                                </div></div>";
+                                
+                                echo "<div class=\"row border border-dark border-3 rounded ml-3 mr-3 pt-3 pb-3\" style=\"background-color: #bbbbbb\">
+                                <div class=\"col-md-12\">";
+                                echo "<p>" . nl2br($resultArr['contents']) . "</p></div></div>";
+                            }
+                        }
+                         
                     ?>                 
                             
                     
@@ -169,29 +227,32 @@
                             }
                         }
                     ?>
-                    <?php
+                    <div class="container-fullwidth p-3">
+                        <?php
 
-                        if(!$loggedin){
-                            echo "<div class=\"container text-center\">
-                            <h3>You must be logged in to comment!</h3>
-                            <a href=\"login.php\" class=\"btn btn-primary btn-lg active\" role=\"button\" aria-pressed=\"true\">Log in</a>
+                            if(!$loggedin){
+                                echo "<div class=\"container text-center\">
+                                <h3>You must be logged in to comment!</h3>
+                                <a href=\"login.php\" class=\"btn btn-primary btn-lg active\" role=\"button\" aria-pressed=\"true\">Log in</a>
+                                </div>";
+                            } else {
+                                echo "<div class=\"container\">";
+                                if($commentErrBool){
+                                echo "<div class=\"alert alert-danger\" role=\"alert\">Error: $commentErr</div>";
+                                }
+                                    
+                                echo "<form action=\"post.php?post_id=$postID\" method=\"get\">
+                                    <div class=\"form-group\">
+                                        <label for=\"commentcontents\">Comment: </label>
+                                        <textarea class=\"form-control\" name=\"commentcontents\" id=\"commentcontents\" rows=\"7\">$contents</textarea>
+                                    </div>
+                                    <button type=\"submit\" id=\"submit\" name=\"submit\" class=\"btn btn-primary\">Submit</button>
+                                </form>
                             </div>";
-                        } else {
-                            echo "<div class=\"container\">";
-                            if($commentErrBool){
-                            echo "<div class=\"alert alert-danger\" role=\"alert\">Error: $commentErr</div>";
                             }
-                                
-                            echo "<form action=\"post.php?post_id=$postID\" method=\"get\">
-                                <div class=\"form-group\">
-                                    <label for=\"commentcontents\">Comment: </label>
-                                    <textarea class=\"form-control\" name=\"commentcontents\" id=\"commentcontents\" rows=\"7\">$contents</textarea>
-                                </div>
-                                <button type=\"submit\" id=\"submit\" name=\"submit\" class=\"btn btn-primary\">Submit</button>
-                            </form>
-                        </div>";
-                        }
-                    ?>
+                        ?>
+                    </div>
+
                     <?php
                         $queryComm = "SELECT * FROM comments WHERE post_id = '$postID' ORDER BY comment_id DESC";
                         $resultComm = $conn->query($queryComm);
@@ -200,12 +261,12 @@
                                 echo "<div class=\"row border border-dark border-3 rounded pt-3 pb-3\" style=\"background-color: #171717\">
                                 <div class=\"col-md-12\">
                                     <h3 class=\"dcsp-text-light\">" . $resultArrComm['username'] . "</h3>
-                                    <h5 class=\"dcsp-text-light\">" . date("Y-M-d H:i:s", strtotime($resultArr['time']) - 6 * 3600 ) . "</h5>
+                                    <h5 class=\"dcsp-text-light\">" . date("Y-M-d H:i:s", strtotime($resultArrComm['time']) - 6 * 3600 ) . "</h5>
                                 </div></div>";
                                 
                                 echo "<div class=\"row border border-dark border-3 rounded ml-3 mr-3 pt-3 pb-3\" style=\"background-color: #bbbbbb\">
                                 <div class=\"col-md-12\">";
-                                echo "<p>" . $resultArrComm['contents'] . "</p></div></div>";
+                                echo "<p>" . nl2br($resultArrComm['contents']) . "</p></div></div>";
                             }
                         }    
                     ?>                 
@@ -231,7 +292,17 @@
                                 <h5 class=\"dcsp-text-light\">" . $resultArr['username'] . "</h5>
                                 <h3 class=\"dcsp-text-light\">On:</h3>
                                 <h5 class=\"dcsp-text-light\">" . date("Y-M-d H:i:s", strtotime($resultArr['time']) - 6 * 3600 ) . "</h5>
-                            </div></div>";
+                                ";
+                            
+                            if($loggedin){
+                                if($_SESSION['currentUser'] == $resultArr['username']){
+                                    echo "<div class=\"container-fullwidth border border-dark border-3 p-3 text-center\">
+                                            <form method=\"get\" action=\"post.php\"><div class=\"pb-2\"><button type=\"editPost\" id=\"editPost\" name=\"editPost\" class=\"btn btn-primary\">Edit Post</button></div></form>
+                                            <form method=\"get\" action=\"post.php\" onsubmit=\"return confirm('Do you really want to delete this post?');\"><div class=\"pb-2\"><button type=\"deletePost\" id=\"deletePost\" name=\"deletePost\" class=\"btn btn-danger\">Delete Post</button></div></form>
+                                        </div>";
+                                }
+                            }
+                                echo "</div></div>";
                         }
                     ?>
                 </div>
@@ -244,5 +315,7 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="ajax.js"></script>
   </body>
 </html>

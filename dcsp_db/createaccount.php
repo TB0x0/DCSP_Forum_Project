@@ -131,7 +131,7 @@
             <label>Password: </label>
             <input type="password" name="password" value="<?=$passVal?>"> <br>
             <label>Re-type Password: </label>
-            <input type="passwordagain" name="passwordagain" value="<?=$passagainVal?>"> <br>
+            <input type="password" name="passwordagain" value="<?=$passagainVal?>"> <br>
             <input type="submit" name="submit" value="Create Account">
         </form>
         
