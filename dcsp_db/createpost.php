@@ -19,11 +19,14 @@
         if(isset($_SESSION['currentUserType'])){
             if ($_SESSION['currentUserType'] == "admin"){
                 $loggedin = true;
+                $admin = true;
             } else if($_SESSION['currentUserType'] == "user") {
                 $loggedin = true;
+                $admin = false;
             }
         } else {
             $loggedin = false;
+            $admin = false;
         }
         unset($_SESSION['postID']);
         $conn = new mysqli($hn, $un, $pw, $db);
@@ -70,7 +73,7 @@
                 <a class="nav-link" href="#">Ipsum</a>
             </li>
             <?php
-                if($loggedin){
+                if($loggedin && !$admin){
                     echo "<li class=\"nav-item dropdown\">
                     <a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"navbarDropdownMenuLink\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">
                     Account
@@ -78,6 +81,17 @@
                     <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdownMenuLink\">
                     <a class=\"dropdown-item\" href=\"#\">Edit Account</a>
                     <a class=\"dropdown-item\" href=\"#\">Lorem ipsum</a>
+                    <a class=\"dropdown-item\" href=\"logout.php\">Log out</a>
+                    </div>
+                    </li>";
+                } else if($loggedin &&  $admin) {
+                    echo "<li class=\"nav-item dropdown\">
+                    <a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"navbarDropdownMenuLink\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">
+                    Account
+                    </a>
+                    <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdownMenuLink\">
+                    <a class=\"dropdown-item\" href=\"#\">Edit Account</a>
+                    <a class=\"dropdown-item\" href=\"admin_page.php\">Admin Page</a>
                     <a class=\"dropdown-item\" href=\"logout.php\">Log out</a>
                     </div>
                     </li>";
