@@ -325,7 +325,7 @@
                                     </div>";
                                     echo "<div class=\"col-md-3\">";   
                                         if($loggedin){
-                                            if($_SESSION['currentUser'] == $resultArrComm['username'] || $_SESSION['currentUser'] == "admin"){
+                                            if($_SESSION['currentUser'] == $resultArrComm['username'] || $_SESSION['currentUserType'] == "admin"){
                                                 echo "<div class=\"row text-center\">
                                                         <div class=\"col-md-6\"><form method=\"get\" action=\"post.php\" onsubmit=\"return confirm('Do you really want to delete this comment?');\"><div class=\"pb-2\"><button type=\"deleteComment\" id=\"deleteComment\" value=\"" . $resultArrComm['comment_id'] . "\" name=\"deleteComment\" class=\"btn btn-danger\">Delete</button></div></form></div>";
                                                         if($_SESSION['currentUser'] == $resultArrComm['username']){
@@ -369,7 +369,7 @@
                                 ";
                             
                             if($loggedin){
-                                if($_SESSION['currentUser'] == $resultArr['username'] || $_SESSION['currentUser'] == "admin"){
+                                if($_SESSION['currentUser'] == $resultArr['username'] || $_SESSION['currentUserType'] == "admin"){
                                     echo "<div class=\"container-fullwidth border border-dark border-3 p-3 text-center\">
                                             <form method=\"get\" action=\"post.php\" onsubmit=\"return confirm('Do you really want to delete this post?');\"><div class=\"pb-2\"><button type=\"deletePost\" id=\"deletePost\" name=\"deletePost\" class=\"btn btn-danger\">Delete Post</button></div></form>";
                                             if($_SESSION['currentUser'] == $resultArr['username']){
