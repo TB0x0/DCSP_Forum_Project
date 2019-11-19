@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
-
+    <title>DCSP Forum Home Page</title>
     <?php
         session_start();
         require_once('dbfuncs/dbfunctions.php');
@@ -143,17 +143,17 @@
                                 $tmpVal = 0;
                                 while(($resultArr = $result->fetch_array()) && $tmpVal < 5){
                                     echo "<div class=\"row border border-dark border-3 rounded ml-3 mr-3 pt-3 pb-3\" style=\"background-color: #bbbbbb\">
-                                    <div class=\"col-md-6\">";
+                                    <div class=\"col-md-5 text-truncate\">";
                                         $postID = $resultArr['post_id'];
-                                        echo "<a href=\"post.php?post_id=" . $postID . "\" class=\"text-info text-truncate stretched-link\" style=\"font-family: 'Roboto', sans-serif; font-size: 20px;\">" . $resultArr['post_title'] . "</a>";
+                                        echo "<a href=\"post.php?post_id=" . $postID . "\" class=\"text-info stretched-link\" style=\"font-family: 'Roboto', sans-serif; font-size: 20px;\">" . $resultArr['post_title'] . "</a>";
                                     echo "</div>
-                                    <div class=\"col-md-2\">";
+                                    <div class=\"col-md-2 text-truncate\">";
                                         echo $resultArr['username'];
                                     echo "</div>
-                                    <div class=\"col-md-2\">";
-                                        echo $resultArr['date'];
+                                    <div class=\"col-md-4\">";
+                                        echo date("Y-M-d H:i:s", strtotime($resultArr['time']) - 6 * 3600 );
                                     echo "</div>
-                                    <div class=\"col-md-2\">";
+                                    <div class=\"col-md-1\">";
                                         $postID = $resultArr['post_id'];
                                         $queryComments = "SELECT * FROM comments WHERE post_id = '$postID'";
                                         $resultComments = $conn->query($queryComments);

@@ -19,12 +19,16 @@
         if(isset($_SESSION['currentUserType'])){
             if ($_SESSION['currentUserType'] == "admin"){
                 $loggedin = true;
+                $admin = true;
             } else if($_SESSION['currentUserType'] == "user") {
                 $loggedin = true;
+                $admin = false;
             }
         } else {
             $loggedin = false;
+            $admin = false;
         }
+        unset($_SESSION['postID']);
 
         $conn = new mysqli($hn, $un, $pw, $db);
 			if ($conn->connect_error)
@@ -65,7 +69,7 @@
                 <a class="nav-link" href="#">Lorum Ipsum</a>
             </li>
             <?php
-                if($loggedin){
+                if($loggedin && !$admin){
                     echo "<li class=\"nav-item dropdown\">
                     <a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"navbarDropdownMenuLink\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">
                     Account
@@ -76,7 +80,18 @@
                     <a class=\"dropdown-item\" href=\"logout.php\">Log out</a>
                     </div>
                     </li>";
-                } else {
+                } else if ($loggedin && $admin) {
+                    echo "<li class=\"nav-item dropdown\">
+                    <a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"navbarDropdownMenuLink\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">
+                    Account
+                    </a>
+                    <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdownMenuLink\">
+                    <a class=\"dropdown-item\" href=\"#\">Edit Account</a>
+                    <a class=\"dropdown-item\" href=\"admin_page.php\">Ban User</a>
+                    <a class=\"dropdown-item\" href=\"logout.php\">Log out</a>
+                    </div>
+                    </li>";
+                }else {
                     echo "<li class=\"nav-item\">
                     <a class=\"nav-link\" href=\"login.php\">Log In/Create Account</a>
                     </li>";
@@ -106,21 +121,21 @@
             $tmpVal = 0;
             while(($resultArr = $result->fetch_array()) && $tmpVal < 5){
                 echo "<div class=\"row border border-dark border-3 rounded ml-3 mr-3 pt-3 pb-3\" style=\"background-color: #bbbbbb\">
-                <div class=\"col-md-6\">";
+                <div class=\"col-md-6 text-truncate\">";
                     $postID = $resultArr['post_id'];
-                    echo "<a href=\"post.php?post_id=" . $postID . "\" class=\"text-info text-truncate stretched-link\" style=\"font-family: 'Roboto', sans-serif; font-size: 20px;\">" . $resultArr['post_title'] . "</a>";
+                    echo "<a href=\"post.php?post_id=" . $postID . "\" class=\"text-info stretched-link\" style=\"font-family: 'Roboto', sans-serif; font-size: 20px;\">" . $resultArr['post_title'] . "</a>";
+                echo "</div>
+                <div class=\"col-md-2 text-truncate\">";
+                    echo "<p>Posted by: " . $resultArr['username'] . "</p>";
                 echo "</div>
                 <div class=\"col-md-2\">";
-                    echo $resultArr['username'];
-                echo "</div>
-                <div class=\"col-md-2\">";
-                    echo $resultArr['date'];
+                    echo date("Y-M-d H:i:s", strtotime($resultArr['time']) - 6 * 3600 );
                 echo "</div>
                 <div class=\"col-md-2\">";
                     $postID = $resultArr['post_id'];
                     $queryComments = "SELECT * FROM comments WHERE post_id = '$postID'";
                     $resultComments = $conn->query($queryComments);
-                    echo $resultComments->num_rows;
+                    echo "<p>Comments: " . $resultComments->num_rows . "</p>";
                 echo "</div>
                 </div>";
 
@@ -128,5 +143,10 @@
             }
         }
     ?>
-    
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>
     </body>
+</html>

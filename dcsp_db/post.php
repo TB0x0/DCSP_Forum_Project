@@ -19,11 +19,14 @@
         if(isset($_SESSION['currentUserType'])){
             if ($_SESSION['currentUserType'] == "admin"){
                 $loggedin = true;
+                $admin = true;
             } else if($_SESSION['currentUserType'] == "user") {
                 $loggedin = true;
+                $admin = false;
             }
         } else {
             $loggedin = false;
+            $admin = false;
         }
 
         $conn = new mysqli($hn, $un, $pw, $db);
@@ -64,7 +67,7 @@
                 <a class="nav-link" href="#">Lorum Ipsum</a>
             </li>
             <?php
-                if($loggedin){
+                if($loggedin && !$admin){
                     echo "<li class=\"nav-item dropdown\">
                     <a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"navbarDropdownMenuLink\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">
                     Account
@@ -75,7 +78,18 @@
                     <a class=\"dropdown-item\" href=\"logout.php\">Log out</a>
                     </div>
                     </li>";
-                } else {
+                } else if ($loggedin && $admin) {
+                    echo "<li class=\"nav-item dropdown\">
+                    <a class=\"nav-link dropdown-toggle\" href=\"#\" id=\"navbarDropdownMenuLink\" data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\">
+                    Account
+                    </a>
+                    <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdownMenuLink\">
+                    <a class=\"dropdown-item\" href=\"#\">Edit Account</a>
+                    <a class=\"dropdown-item\" href=\"admin_page.php\">Ban User</a>
+                    <a class=\"dropdown-item\" href=\"logout.php\">Log out</a>
+                    </div>
+                    </li>";
+                }else {
                     echo "<li class=\"nav-item\">
                     <a class=\"nav-link\" href=\"login.php\">Log In/Create Account</a>
                     </li>";
@@ -186,6 +200,7 @@
                                 echo "<div class=\"row border border-dark border-3 rounded pt-3 pb-3\" style=\"background-color: #171717\">
                                 <div class=\"col-md-12\">
                                     <h3 class=\"dcsp-text-light\">" . $resultArrComm['username'] . "</h3>
+                                    <h5 class=\"dcsp-text-light\">" . date("Y-M-d H:i:s", strtotime($resultArr['time']) - 6 * 3600 ) . "</h5>
                                 </div></div>";
                                 
                                 echo "<div class=\"row border border-dark border-3 rounded ml-3 mr-3 pt-3 pb-3\" style=\"background-color: #bbbbbb\">
@@ -202,6 +217,23 @@
             <div class="col-md-3">
                 <div class="container-fullwidth border border-dark border-3 p-3 text-center">
                     <a href="createpost.php" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">New Post</a>
+                </div>
+                <div class="container-fullwidth border border-dark border-3 p-3 text-center">
+                    <?php
+                        $query = "SELECT * FROM posts WHERE post_id = '$postID'";
+                        $result = $conn->query($query);
+                        if($result){
+                            $resultArr = $result->fetch_array();
+                            
+                            echo "<div class=\"row border border-dark border-3 rounded pt-3 pb-3\" style=\"background-color: #171717\">
+                            <div class=\"col-md-12\">
+                                <h3 class=\"dcsp-text-light\">Posted By:</h3>
+                                <h5 class=\"dcsp-text-light\">" . $resultArr['username'] . "</h5>
+                                <h3 class=\"dcsp-text-light\">On:</h3>
+                                <h5 class=\"dcsp-text-light\">" . date("Y-M-d H:i:s", strtotime($resultArr['time']) - 6 * 3600 ) . "</h5>
+                            </div></div>";
+                        }
+                    ?>
                 </div>
             </div>
         </div>

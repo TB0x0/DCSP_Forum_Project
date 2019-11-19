@@ -7,7 +7,7 @@ function db_add_user($connection, $un, $st, $pw){
     if (!$result) die($connection->error);}
 
 function db_add_post($connection, $un, $pt, $cn, $ct){
-    $insert_into_posts = "INSERT INTO posts (username, post_title, contents, category, date)"."VALUES('$un','$pt','$cn','$ct',CURDATE())";
+    $insert_into_posts = "INSERT INTO posts (username, post_title, contents, category, time)"."VALUES('$un','$pt','$cn','$ct',UTC_TIMESTAMP)";
     $result = $connection->query($insert_into_posts);
     if (!$result) die($connection->error);}
 

@@ -20,7 +20,7 @@
     post_title VARCHAR(64) NOT NULL,
     contents VARCHAR(500) NOT NULL,
     category VARCHAR(64) NOT NULL,
-    date DATE NOT NULL,
+    time DATETIME NOT NULL,
     PRIMARY KEY (post_id)
     )";
     $result = $connection->query($create_posts_table);
