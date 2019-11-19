@@ -115,6 +115,13 @@
                 <div class="container-fullwidth border border-dark border-3 p-3">
 
                     <?php
+                        if(isset($_GET['deleteComment'])){
+                            $postID = $_SESSION['postID'];
+                            $commentID = $_GET['deleteComment'];
+                            db_delete_comment($conn, $postID, $commentID);
+                            header("Location: post.php?post_id=$postID");
+                            
+                        }
                         if(isset($_GET['deletePost'])){
                             $postID = $_SESSION['postID'];
                             $queryDelComm = "SELECT * FROM comments WHERE post_id = '$postID'";
@@ -125,6 +132,31 @@
                                 }
                                 db_delete_post($conn, $postID);
                                 header("Location: main.php");
+                            }
+                        }
+                        if(isset($_GET['submitCommEdit'])){
+                            $postID = $_SESSION['postID'];
+                            $commentID = $_GET['submitCommEdit'];
+                            $postErr = "";
+                            $postErrBool = false;
+                            $contents = "";
+                            if(isset($_GET['submitCommEdit'])){
+                                if(isset($_GET['commentcontents'])){
+                                    if(preg_match('/^(.*)$/ms',$_GET['commentcontents']) && !(ctype_space($_GET['commentcontents'])) && strlen($_GET['commentcontents']) > 5 && strlen($_GET['commentcontents']) <= 500){
+                                        $postErr = "";
+                                        $postErrBool = false;
+                                        //Contents is good
+                            
+                                        //ALL INFO IS GOOD, ADD THE POST AND FORWARD USER TO IT'S PAGE
+                                        db_edit_comment($conn, $commentID, $_GET['commentcontents']);
+                                        header("Location: post.php?post_id=$postID");
+                                        
+                                    } else {
+                                        $postErr = "Your comment contents must be between 5 and 500 characters.";
+                                        $postErrBool = true;
+                                        $contents = $_GET['commentcontents'];
+                                    }
+                                }
                             }
                         }
                         if(isset($_GET['submitEdit'])){
@@ -254,21 +286,63 @@
                     </div>
 
                     <?php
-                        $queryComm = "SELECT * FROM comments WHERE post_id = '$postID' ORDER BY comment_id DESC";
-                        $resultComm = $conn->query($queryComm);
-                        if($resultComm){
-                            while($resultArrComm = $resultComm->fetch_array()){
-                                echo "<div class=\"row border border-dark border-3 rounded pt-3 pb-3\" style=\"background-color: #171717\">
-                                <div class=\"col-md-12\">
-                                    <h3 class=\"dcsp-text-light\">" . $resultArrComm['username'] . "</h3>
-                                    <h5 class=\"dcsp-text-light\">" . date("Y-M-d H:i:s", strtotime($resultArrComm['time']) - 6 * 3600 ) . "</h5>
-                                </div></div>";
-                                
-                                echo "<div class=\"row border border-dark border-3 rounded ml-3 mr-3 pt-3 pb-3\" style=\"background-color: #bbbbbb\">
-                                <div class=\"col-md-12\">";
-                                echo "<p>" . nl2br($resultArrComm['contents']) . "</p></div></div>";
-                            }
-                        }    
+                        if(isset($_GET['editComment'])){
+                            $postID = $_SESSION['postID'];
+                            $commentID = $_GET['editComment'];
+                            $queryComm = "SELECT * FROM comments WHERE comment_id = '$commentID'";
+                            $resultComm = $conn->query($queryComm);
+                            $resultArrComm = $resultComm->fetch_array();
+                            echo "<div class=\"row border border-dark border-3 rounded pt-3 pb-3\" style=\"background-color: #171717\">
+                                    <div class=\"col-md-9 text-truncate\">
+                                        <h3 class=\"dcsp-text-light\">" . $resultArrComm['username'] . "</h3>
+                                        <h5 class=\"dcsp-text-light\">" . date("Y-M-d H:i:s", strtotime($resultArrComm['time']) - 6 * 3600 ) . "</h5>
+                                    </div>";
+                                    echo "<div class=\"col-md-3\">";   
+                                        
+                                    echo "</div>
+                                    </div>";
+                                    
+                                    echo "<div class=\"row border border-dark border-3 rounded ml-3 mr-3 pt-3 pb-3\" style=\"background-color: #bbbbbb\">
+                                    <div class=\"col-md-12\">";
+                                    echo "<form action=\"post.php?post_id=$postID\" method=\"get\">
+                                    <div class=\"form-group\">
+                                        <label for=\"commentcontents\">Comment: </label>
+                                        <textarea class=\"form-control\" name=\"commentcontents\" id=\"commentcontents\" rows=\"7\">" . $resultArrComm['contents'] . "</textarea>
+                                    </div>
+                                    <button type=\"submitCommEdit\" id=\"submitCommEdit\" name=\"submitCommEdit\" value=\"" . $commentID . "\" class=\"btn btn-primary\">Submit</button>
+                                     </form></div></div>";
+                        } else {
+
+
+                            $queryComm = "SELECT * FROM comments WHERE post_id = '$postID' ORDER BY comment_id DESC";
+                            $resultComm = $conn->query($queryComm);
+                            if($resultComm){
+                                while($resultArrComm = $resultComm->fetch_array()){
+                                    echo "<div class=\"row border border-dark border-3 rounded pt-3 pb-3\" style=\"background-color: #171717\">
+                                    <div class=\"col-md-9 text-truncate\">
+                                        <h3 class=\"dcsp-text-light\">" . $resultArrComm['username'] . "</h3>
+                                        <h5 class=\"dcsp-text-light\">" . date("Y-M-d H:i:s", strtotime($resultArrComm['time']) - 6 * 3600 ) . "</h5>
+                                    </div>";
+                                    echo "<div class=\"col-md-3\">";   
+                                        if($loggedin){
+                                            if($_SESSION['currentUser'] == $resultArrComm['username'] || $_SESSION['currentUser'] == "admin"){
+                                                echo "<div class=\"row text-center\">
+                                                        <div class=\"col-md-6\"><form method=\"get\" action=\"post.php\" onsubmit=\"return confirm('Do you really want to delete this comment?');\"><div class=\"pb-2\"><button type=\"deleteComment\" id=\"deleteComment\" value=\"" . $resultArrComm['comment_id'] . "\" name=\"deleteComment\" class=\"btn btn-danger\">Delete</button></div></form></div>";
+                                                        if($_SESSION['currentUser'] == $resultArrComm['username']){
+                                                            echo "<div class=\"col-md-6\"><form method=\"get\" action=\"post.php\"><div class=\"pb-2\"><button type=\"editComment\" id=\"editComment\" value=\"" . $resultArrComm['comment_id'] . "\" name=\"editComment\" class=\"btn btn-primary\">Edit</button></div></form></div>";
+                                                        }
+                                                    echo "</div>";
+                                            }
+                                        }
+                                    echo "</div>
+                                    </div>";
+                                    
+                                    echo "<div class=\"row border border-dark border-3 rounded ml-3 mr-3 pt-3 pb-3\" style=\"background-color: #bbbbbb\">
+                                    <div class=\"col-md-12\">";
+                                    echo "<p>" . nl2br($resultArrComm['contents']) . "</p></div></div>";
+                                }
+                            }  
+                        }  
                     ?>                 
                             
                     
@@ -295,11 +369,14 @@
                                 ";
                             
                             if($loggedin){
-                                if($_SESSION['currentUser'] == $resultArr['username']){
+                                if($_SESSION['currentUser'] == $resultArr['username'] || $_SESSION['currentUser'] == "admin"){
                                     echo "<div class=\"container-fullwidth border border-dark border-3 p-3 text-center\">
-                                            <form method=\"get\" action=\"post.php\"><div class=\"pb-2\"><button type=\"editPost\" id=\"editPost\" name=\"editPost\" class=\"btn btn-primary\">Edit Post</button></div></form>
-                                            <form method=\"get\" action=\"post.php\" onsubmit=\"return confirm('Do you really want to delete this post?');\"><div class=\"pb-2\"><button type=\"deletePost\" id=\"deletePost\" name=\"deletePost\" class=\"btn btn-danger\">Delete Post</button></div></form>
-                                        </div>";
+                                            <form method=\"get\" action=\"post.php\" onsubmit=\"return confirm('Do you really want to delete this post?');\"><div class=\"pb-2\"><button type=\"deletePost\" id=\"deletePost\" name=\"deletePost\" class=\"btn btn-danger\">Delete Post</button></div></form>";
+                                            if($_SESSION['currentUser'] == $resultArr['username']){
+                                                echo "<form method=\"get\" action=\"post.php\"><div class=\"pb-2\"><button type=\"editPost\" id=\"editPost\" name=\"editPost\" class=\"btn btn-primary\">Edit Post</button></div></form>";
+                                            }
+                                            
+                                            echo "</div>";
                                 }
                             }
                                 echo "</div></div>";
