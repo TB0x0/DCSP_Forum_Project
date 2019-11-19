@@ -182,13 +182,13 @@
             </div>
             <div class = "row">
                 <div class = "col-md-6">
-                    <button type="submit" name = "ban" id = "ban" class="btn btn-danger btn-block ">Submit Username to Ban</button>
+                    <button type="submit" name = "ban" id = "ban" class="btn btn-primary btn-block ">Submit Username to Ban</button>
                 </div>
                 <div class = "col-md-6">
-                    <button type="submit" name = "unban" id = "unban" class="btn btn-success btn-block">Submit Username to Un-Ban</button>
+                    <button type="submit" name = "unban" id = "unban" class="btn btn-primary btn-block">Submit Username to Un-Ban</button>
                 </div>
                 <div class = "col-md-12">
-                    <button type="submit" name = "add" id = "add" class="btn btn-warning btn-block">Promote User to Admin</button>
+                    <button type="submit" name = "add" id = "add" class="btn btn-primary btn-block mt-3">Promote User to Admin</button>
                 </div>
             </div>
             <div class = "row">
