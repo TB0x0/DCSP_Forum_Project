@@ -75,7 +75,7 @@
                     </a>
                     <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdownMenuLink\">
                     <a class=\"dropdown-item\" href=\"#\">Edit Account</a>
-                    <a class=\"dropdown-item\" href=\"admin_page.php\">Ban User</a>
+                    <a class=\"dropdown-item\" href=\"admin_page.php\">Admin Page</a>
                     <a class=\"dropdown-item\" href=\"logout.php\">Log out</a>
                     </div>
                     </li>";
@@ -106,12 +106,16 @@
                                 {
                                 $query = "UPDATE users SET status = 'banned' WHERE username = '$username'";
                                 $conn->query($query);
-                                $errorVal = "";
-                                $userVal = "";
-                                }
-                                else{
-                                $errorVal = "That user is already banned";
+                                $errorVal = "User has been Banned";
                                 $userVal = $username;
+                                }
+                                else if ($resultArr['status'] == "admin"){
+                                $errorVal = "You can not Ban an Admin.";
+                                $userVal = $username;
+                                }
+                                else {
+                                    $errorVal = "That User is already Banned.";
+                                    $userVal = $username;
                                 }
                         }
                 }
@@ -131,11 +135,35 @@
                                 {
                                 $query = "UPDATE users SET status ='user' WHERE username = '$username'";
                                 $conn->query($query);
-                                $errorVal = "";
-                                $userVal = "";
+                                $errorVal = "User has been Un-Banned";
+                                $userVal = $username;
                                 }
                                 else{
                                 $errorVal = "That user is not currently banned";
+                                $userVal = $username;
+                                }
+                        }
+                }
+            }
+            if(isset($_POST['add'])){
+                if(isset($_POST['username'])){
+                    $username = $_POST['username'];
+                    $query = "SELECT status FROM users WHERE username = '$username'";
+                    $result = $conn->query($query);
+                    $resultArr = $result->fetch_array();
+                        if(!$resultArr){
+                            $errorVal = "That username does not exist";
+                            $userVal = $username;
+                        }else{
+                            if($resultArr['status'] == "user")
+                                {
+                                $query = "UPDATE users SET status = 'admin' WHERE username = '$username'";
+                                $conn->query($query);
+                                $errorVal = "User Promoted to Admin";
+                                $userVal = $username;
+                                }
+                                else{
+                                $errorVal = "That user is already an admin.";
                                 $userVal = $username;
                                 }
                         }
@@ -146,7 +174,7 @@
         <div class="text-center container" >
             <div class = "row">
                 <div class = "col-md-12 text-center">
-                    <h3> Enter the username of the user you would like to ban</h3>
+                    <h3> Enter the Username Below</h3>
                 </div>
             </div>
             <div class = "row">
@@ -158,10 +186,13 @@
             </div>
             <div class = "row">
                 <div class = "col-md-6">
-                    <button type="submit" name = "ban" id = "ban" class="btn btn-danger btn-block">Submit Username to Ban</button>
+                    <button type="submit" name = "ban" id = "ban" class="btn btn-primary btn-block ">Submit Username to Ban</button>
                 </div>
                 <div class = "col-md-6">
-                    <button type="submit" name = "unban" id = "unban" class="btn btn-success btn-block">Submit Username to Un-Ban</button>
+                    <button type="submit" name = "unban" id = "unban" class="btn btn-primary btn-block">Submit Username to Un-Ban</button>
+                </div>
+                <div class = "col-md-12">
+                    <button type="submit" name = "add" id = "add" class="btn btn-primary btn-block mt-3">Promote User to Admin</button>
                 </div>
             </div>
             <div class = "row">

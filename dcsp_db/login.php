@@ -70,13 +70,18 @@
                 //If the username is in the database, the first part will be 1. 0 otherwise.
                 //For the password, hash the password provided and compare it to the hashed password in the database.
 				if($userInfo['username'] == $username && $userInfo['password'] == (hash('ripemd128', "$sal1$password$sal2"))){
-					$displayName = $userInfo['username']; //****THIS WAS CHANGED TO USERNAME TO FIX ISSUE WITH CREATE POST****
-                    $status = $userInfo['status'];
-                    //Creadt session variables to keep track of the user's display name and status
-					$_SESSION['currentUser'] = $displayName;
-                    $_SESSION['currentUserType'] = $status;
-                    //Forward the user to the main page.
-                    header("Location: main.php");
+                    if($userInfo['status'] == 'banned'){
+                        $errorVal = "You are currently banned.";
+                    }
+                    else {
+                        $displayName = $userInfo['username']; //****THIS WAS CHANGED TO USERNAME TO FIX ISSUE WITH CREATE POST****
+                        $status = $userInfo['status'];
+                        //Creadt session variables to keep track of the user's display name and status
+                        $_SESSION['currentUser'] = $displayName;
+                        $_SESSION['currentUserType'] = $status;
+                        //Forward the user to the main page.
+                        header("Location: main.php");
+                    }
 				} else {
                     $errorVal = "Your username or password is incorrect.";
                     //Retain the values the user entered for QOL.
