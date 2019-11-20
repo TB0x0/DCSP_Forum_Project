@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
-    <title>Placeholder Create Post Page</title>
+    <title>Creaet Stack Undeflow Post</title>
 
     <?php
         session_start();
@@ -57,7 +57,7 @@
         ?>
     <div class="container-fullwidth">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="main.php">DCSP Forum</a>
+        <a class="navbar-brand" href="main.php">Stack Underflow</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>

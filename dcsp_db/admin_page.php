@@ -8,7 +8,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
 
-    <title>DCSP Admin Page</title>
+    <title>Stack Underflow Admin Page</title>
 
     <?php
         session_start();
@@ -52,7 +52,7 @@
   <body style="background-color: #bfc9ca">
     <div class="container-fullwidth">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="main.php">DCSP Forum</a>
+        <a class="navbar-brand" href="main.php">Stack Underflow</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
