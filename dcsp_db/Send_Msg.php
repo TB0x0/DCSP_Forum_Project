@@ -25,6 +25,7 @@
             }
         } else {
             $loggedin = false;
+            header("Location: main.php");
             $admin = false;
         }
         unset($_SESSION['postID']);
@@ -70,7 +71,6 @@
                     </a>
                     <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdownMenuLink\">
                     <a class=\"dropdown-item\" href=\"#\">Edit Account</a>
-                    <a class=\"dropdown-item\" href=\"#\">Lorem ipsum</a>
                     <a class=\"dropdown-item\" href=\"logout.php\">Log out</a>
                     </div>
                     </li>";
@@ -109,17 +109,18 @@
         <div class="row">
             <div class="col-md-9">
                 <div class="container-fullwidth border border-dark border-3 p-3">
-                    <div class=\"form-group\">
-                        <label for=\"Recipient\">Recipient: </label>
-                        <input type=\"text\" class=\"form-control\" name=\"Recpient\" id=\"Recipient\" aria-describedby=\"Help\" placeholder="Recipient">
-                        <small id=\"Help\" class=\"form-text text-muted\">Enter a username that you want to send a message to</small>
-                    </div>
-                    <div class=\"form-group\">
-                        <label for=\"msgcontents\">Contents: </label>
-                        <textarea class=\"form-control\" name=\"msgcontents\" id=\"msgcontents\" rows=\"7\" placeholder="Message Contents"></textarea>
-                    </div>
-                        <button type=\"submit\" id=\"submit\" name=\"submit\" class=\"btn btn-primary\">Submit</button>
-                        </form>
+                    <form action="Send_Msg.php" method="get">
+                        <div class="form-group">
+                            <label for="Recipient">Recipient: </label>
+                            <input type="text" class="form-control" name="Recpient" id="Recipient" aria-describedby="Help" placeholder="Recipient">
+                            <small id="Help" class="form-text text-muted">Enter a username that you want to send a message to</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="msgcontents">Contents: </label>
+                            <textarea class="form-control" name="msgcontents" id="msgcontents" rows="7" placeholder="Message Contents"></textarea>
+                        </div>
+                            <button type="submit" id="submit" name="submit" class="btn btn-primary">Submit</button>
+                    </form>
                     
                 </div>
             </div>
