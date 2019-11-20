@@ -241,10 +241,7 @@
 
             <div class="col-md-3">
                 <div class="container-fullwidth border border-dark border-3 p-3 text-center">
-                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
-                    Perferendis numquam beatae optio aliquam asperiores quod veniam 
-                    adipisci repellendus reiciendis exercitationem, quas aperiam natus 
-                    odio! Ut magnam tempora quod dicta exercitationem.</p>
+                    <p>Keep posts off topic. Be positive and supportive of your fellow Stack Underflow readers. If there are already posts with your question please make a new one so that we can bury the relevant posts and frustrate everyone who has answered the same question a million times. Thank you.</p>
                 </div>
             </div>
         </div>
