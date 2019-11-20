@@ -136,16 +136,12 @@
                         if(isset($_GET['submitCommEdit'])){
                             $postID = $_SESSION['postID'];
                             $commentID = $_GET['submitCommEdit'];
-                            $postErr = "";
-                            $postErrBool = false;
                             $commentErr = "";
                             $commentErrBool = false;
                             $contents = "";
                             if(isset($_GET['submitCommEdit'])){
                                 if(isset($_GET['commentcontents'])){
                                     if(preg_match('/^(.*)$/ms',$_GET['commentcontents']) && !(ctype_space($_GET['commentcontents'])) && strlen($_GET['commentcontents']) > 5 && strlen($_GET['commentcontents']) <= 500){
-                                        $postErr = "";
-                                        $postErrBool = false;
                                         $commentErr = "";
                                         $commentErrBool = false;
                                         //Contents is good
@@ -155,8 +151,6 @@
                                         header("Location: post.php?post_id=$postID");
                                         
                                     } else {
-                                        $postErr = "Your comment contents must be between 5 and 500 characters.";
-                                        $postErrBool = true;
                                         $commentErr = "Your comment contents must be between 5 and 500 characters.";
                                         $commentErrBool = true;
                                         $contents = $_GET['commentcontents'];
@@ -253,15 +247,9 @@
                                     header("Location: post.php?post_id=$postID");
                                     
                                 } else {
-<<<<<<< HEAD
-                                    $commentErrBool = true;
-                                    $commentErr = "Your comment must be between 5 and 500 characters.";
-                                    //echo "Your comment must be between 5 and 500 characters.";
-=======
 
                                     $commentErr = "Your comment must be between 5 and 500 characters.";
                                     $commentErrBool = true;
->>>>>>> 02f07a5bd1db2e365193fcc5484996531f80c9c3
                                     $contents = $_GET['commentcontents'];
                                 }
                             } else {
