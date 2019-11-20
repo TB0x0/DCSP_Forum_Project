@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
-    <title>DCSP Forum Home Page</title>
+    <title>Stack Underflow Home Page</title>
     <?php
         session_start();
         require_once('dbfuncs/dbfunctions.php');
@@ -51,7 +51,7 @@
   <body style="background-color: #bfc9ca">
     <div class="container-fullwidth">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">DCSP Forum</a>
+        <a class="navbar-brand" href="#">Stack Underflow</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>

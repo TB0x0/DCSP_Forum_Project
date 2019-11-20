@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <title>Create an account</title>
+        <title>Create an Account</title>
 
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
@@ -105,7 +105,7 @@
         ?>
         <div class="container-fullwidth">
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="main.php">DCSP Forum</a>
+            <a class="navbar-brand" href="main.php">Stack Underflow</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -118,8 +118,8 @@
             </nav>
         </div>
         <div class="text-center container" style="background-color: #abb2b9">
-        <h1>Create an account on the <span style="font-style:italic; font-weight:bold; color: maroon">
-                DCSP Forum</span>!</h1>
+        <h1>Create an account on <span style="font-style:italic; font-weight:bold; color: maroon">
+                Stack Underflow</span>!</h1>
                 
         <p style="color: red">
         <?=$errorVal?>
