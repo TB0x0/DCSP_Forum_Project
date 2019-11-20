@@ -64,7 +64,7 @@
                 <a class="nav-link" href="createpost.php">New Post</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Lorum Ipsum</a>
+                <a class="nav-link" href="inbox_page.php">Inbox</a>
             </li>
             <?php
                 if($loggedin && !$admin){
@@ -74,7 +74,6 @@
                     </a>
                     <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdownMenuLink\">
                     <a class=\"dropdown-item\" href=\"#\">Edit Account</a>
-                    <a class=\"dropdown-item\" href=\"#\">Lorem ipsum</a>
                     <a class=\"dropdown-item\" href=\"logout.php\">Log out</a>
                     </div>
                     </li>";
@@ -119,7 +118,7 @@
                         foreach($categories as $category){
                             echo "<div class=\"row border border-dark border-3 rounded pt-3 pb-3\" style=\"background-color: #171717\">
                             <div class=\"col-md-3\">
-                                <h3 class=\"dcsp-text-light\">$category</h3>
+                                <h3 class=\"dcsp-text-light\"><a href=\"category.php?category=" . $category . "\" class=\"dcsp-text-light\">$category</a></h3>
                             </div>
                             <div class=\"col-md-6\"></div>
                             <div class=\"col-md-3\">";

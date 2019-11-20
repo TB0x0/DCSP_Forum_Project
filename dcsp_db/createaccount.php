@@ -99,7 +99,7 @@
                     $passVal = $_POST['password'];
                 }
 		    } else {
-				$errorVal = "Please enter a username, display name, and password.";
+				$errorVal = "Please enter a username, and password.";
 			}
 		}
         ?>

@@ -65,7 +65,7 @@
                 <a class="nav-link" href="createpost.php">New Post</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Lorum Ipsum</a>
+                <a class="nav-link" href="inbox_page.php">Inbox</a>
             </li>
             <?php
                 if ($loggedin && $admin) {

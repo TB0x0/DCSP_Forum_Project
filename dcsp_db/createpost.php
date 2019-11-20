@@ -70,7 +70,7 @@
                 <a class="nav-link active" href="#">New Post</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Ipsum</a>
+                <a class="nav-link" href="inbox_page.php">Inbox</a>
             </li>
             <?php
                 if($loggedin && !$admin){
@@ -80,7 +80,6 @@
                     </a>
                     <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdownMenuLink\">
                     <a class=\"dropdown-item\" href=\"#\">Edit Account</a>
-                    <a class=\"dropdown-item\" href=\"#\">Lorem ipsum</a>
                     <a class=\"dropdown-item\" href=\"logout.php\">Log out</a>
                     </div>
                     </li>";
