@@ -50,7 +50,7 @@
 		if(isset($_POST['submit'])){
 			if(isset($_POST['username'], $_POST['password'], $_POST['passwordagain'])){
                 //Check if the username is within the requirements.
-                if(preg_match('/^[a-zA-Z]*$/',$_POST['username']) && strlen($_POST['username']) > 5 && strlen($_POST['username']) <= 32){
+                if(preg_match('/^[a-zA-Z0-9_\-]*$/',$_POST['username']) && strlen($_POST['username']) > 5 && strlen($_POST['username']) <= 32){
                     //If the username is valid, check to see if it is already in use.
                     $username = $_POST['username'];
                     $query = "SELECT * FROM users WHERE username = '$username'";
