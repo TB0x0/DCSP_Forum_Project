@@ -258,6 +258,7 @@
                                     $commentErr = "Your comment must be between 5 and 500 characters.";
                                     //echo "Your comment must be between 5 and 500 characters.";
 =======
+
                                     $commentErr = "Your comment must be between 5 and 500 characters.";
                                     $commentErrBool = true;
 >>>>>>> 02f07a5bd1db2e365193fcc5484996531f80c9c3
