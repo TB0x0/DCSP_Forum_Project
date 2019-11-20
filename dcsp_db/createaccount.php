@@ -93,7 +93,7 @@
                         }
                     }                  
                 } else {
-                    $errorVal = "Username must be 6-32 upper and lowercase letters only.";
+                    $errorVal = "Username must be 6-32 letters, numbers, spaces, hyphens, and underscores only.";
                     $userVal = $_POST['username'];
                     $passagainVal = $_POST['passwordagain'];
                     $passVal = $_POST['password'];
