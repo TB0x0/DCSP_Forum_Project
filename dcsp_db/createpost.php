@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
-    <title>Creaet Stack Undeflow Post</title>
+    <title>Create Stack Undeflow Post</title>
 
     <?php
         session_start();
