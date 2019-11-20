@@ -136,14 +136,14 @@
                         if(isset($_GET['submitCommEdit'])){
                             $postID = $_SESSION['postID'];
                             $commentID = $_GET['submitCommEdit'];
-                            $postErr = "";
-                            $postErrBool = false;
+                            $commentErr = "";
+                            $commentErrBool = false;
                             $contents = "";
                             if(isset($_GET['submitCommEdit'])){
                                 if(isset($_GET['commentcontents'])){
                                     if(preg_match('/^(.*)$/ms',$_GET['commentcontents']) && !(ctype_space($_GET['commentcontents'])) && strlen($_GET['commentcontents']) > 5 && strlen($_GET['commentcontents']) <= 500){
-                                        $postErr = "";
-                                        $postErrBool = false;
+                                        $commentErr = "";
+                                        $commentErrBool = false;
                                         //Contents is good
                             
                                         //ALL INFO IS GOOD, ADD THE POST AND FORWARD USER TO IT'S PAGE
@@ -151,8 +151,8 @@
                                         header("Location: post.php?post_id=$postID");
                                         
                                     } else {
-                                        $postErr = "Your comment contents must be between 5 and 500 characters.";
-                                        $postErrBool = true;
+                                        $commentErr = "Your comment contents must be between 5 and 500 characters.";
+                                        $commentErrBool = true;
                                         $contents = $_GET['commentcontents'];
                                     }
                                 }
@@ -247,13 +247,13 @@
                                     header("Location: post.php?post_id=$postID");
                                     
                                 } else {
-                                    $postErr = "Your comment must be between 5 and 500 characters.";
-                                    $postErrBool = true;
+                                    $commentErr = "Your comment must be between 5 and 500 characters.";
+                                    $commentErrBool = true;
                                     $contents = $_GET['commentcontents'];
                                 }
                             } else {
-                                $postErr = "You must enter a comment.";
-                                $postErrBool = true;
+                                $commentErr = "You must enter a comment.";
+                                $commentErrBool = true;
                                 $contents = $_GET['commentcontents'];
                             }
                         }
@@ -303,6 +303,7 @@
                                     
                                     echo "<div class=\"row border border-dark border-3 rounded ml-3 mr-3 pt-3 pb-3\" style=\"background-color: #bbbbbb\">
                                     <div class=\"col-md-12\">";
+
                                     echo "<form action=\"post.php?post_id=$postID\" method=\"get\">
                                     <div class=\"form-group\">
                                         <label for=\"commentcontents\">Comment: </label>
