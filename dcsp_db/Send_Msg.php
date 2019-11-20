@@ -60,7 +60,7 @@
                 <a class="nav-link" href="createpost.php">New Post</a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="#">Inbox</a>
+                <a class="nav-link" href="inbox_page.php">Inbox</a>
             </li>
             <?php
                 if($loggedin && !$admin){
@@ -108,7 +108,20 @@
     <div class="container pt-5" style="background-color: #abb2b9">
         <div class="row">
             <div class="col-md-9">
-                <div class="container-fullwidth border border-dark border-3 p-3">Inbox still WIP</div>
+                <div class="container-fullwidth border border-dark border-3 p-3">
+                    <div class=\"form-group\">
+                        <label for=\"Recipient\">Recipient: </label>
+                        <input type=\"text\" class=\"form-control\" name=\"Recpient\" id=\"Recipient\" aria-describedby=\"Help\" placeholder="Recipient">
+                        <small id=\"Help\" class=\"form-text text-muted\">Enter a username that you want to send a message to</small>
+                    </div>
+                    <div class=\"form-group\">
+                        <label for=\"msgcontents\">Contents: </label>
+                        <textarea class=\"form-control\" name=\"msgcontents\" id=\"msgcontents\" rows=\"7\" placeholder="Message Contents"></textarea>
+                    </div>
+                        <button type=\"submit\" id=\"submit\" name=\"submit\" class=\"btn btn-primary\">Submit</button>
+                        </form>
+                    
+                </div>
             </div>
             <div class="col-md-3">
                 <div class="container-fullwidth border border-dark border-3 p-3 text-center">
@@ -118,7 +131,9 @@
                     <a href="createpost.php" class="btn btn-primary btn-lg active" role="button" aria-pressed="true">New Post</a>
                 </div>
             </div>
-
+                    
+                </div>
+            </div>
         </div>
     </div>
 </body>

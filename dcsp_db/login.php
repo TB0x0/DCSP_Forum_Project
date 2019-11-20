@@ -31,22 +31,30 @@
             require_once('dbfuncs/dbfunctions.php');
             require_once('dbfuncs/dblogin.php');
         ?>
-		
+        
         <?php   
-			session_start();
-			$conn = new mysqli($hn, $un, $pw, $db);
-			if ($conn->connect_error)
+            session_start();
+            $conn = new mysqli($hn, $un, $pw, $db);
+            if ($conn->connect_error)
                 die($conn->connect_error);
             unset($_SESSION['postID']);
-		?>
+
+            function sanitizeInputs($var){
+                $var = stripslashes($var);
+                $var = strip_tags($var);
+                $var = htmlentities($var);
+                $var = trim($var);
+                return $var;
+            }
+        ?>
     </head>
     <body style="background-color: #bfc9ca">
         <?php
             $sal1 = "zx&h^"; 
             $sal2 = "qp%@&";
-			$errorVal = "";
-			$userVal = "";
-			$passVal = "";
+            $errorVal = "";
+            $userVal = "";
+            $passVal = "";
             
             //Forward the user to the main page if they are logged in already.
         if(isset($_SESSION['currentUserType'])){
@@ -58,18 +66,20 @@
         }
 
         
-		if(isset($_POST['submit'])){
-			if(isset($_POST['username'], $_POST['password'])){
-				$username = $_POST['username'];
-				//Get the user who's name matches the username given
-				$query = "SELECT * FROM users WHERE username = '$username'";
+        if(isset($_POST['submit'])){
+            if(isset($_POST['username'], $_POST['password'])){
+                $username = $_POST['username'];
+                //sanitizeInputs('username');
+                //sanitizeInputs($_POST['password']);
+                //Get the user who's name matches the username given
+                $query = "SELECT * FROM users WHERE username = '$username'";
                 //Put result into $userInfo
-				$result = $conn->query($query);
-				$userInfo = $result->fetch_array();
+                $result = $conn->query($query);
+                $userInfo = $result->fetch_array();
                 $password = $_POST['password'];
                 //If the username is in the database, the first part will be 1. 0 otherwise.
                 //For the password, hash the password provided and compare it to the hashed password in the database.
-				if($userInfo['username'] == $username && $userInfo['password'] == (hash('ripemd128', "$sal1$password$sal2"))){
+                if($userInfo['username'] == $username && $userInfo['password'] == (hash('ripemd128', "$sal1$password$sal2"))){
                     if($userInfo['status'] == 'banned'){
                         $errorVal = "You are currently banned.";
                     }
@@ -82,16 +92,16 @@
                         //Forward the user to the main page.
                         header("Location: main.php");
                     }
-				} else {
+                } else {
                     $errorVal = "Your username or password is incorrect.";
                     //Retain the values the user entered for QOL.
-					$userVal = $_POST['username'];
-					$passVal = $_POST['password'];
-				}
-			} else {
-				$errorVal = "Please enter a username and password.";
-			}
-		}
+                    $userVal = $_POST['username'];
+                    $passVal = $_POST['password'];
+                }
+            } else {
+                $errorVal = "Please enter a username and password.";
+            }
+        }
         ?>
         <div class="container-fullwidth">
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -127,7 +137,7 @@
                 <a href="createaccount.php">Create Account</a>
             </p>
         </div>
-	</body>
+    </body>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

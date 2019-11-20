@@ -25,6 +25,14 @@
 			if ($conn->connect_error)
                 die($conn->connect_error);
             unset($_SESSION['postID']);
+
+            function sanitizeInputs($var){
+                $var = stripslashes($var);
+                $var = strip_tags($var);
+                $var = htmlentities($var);
+                $var = trim($var);
+                return $var;
+            }
 		?>
     </head>
     <body style="background-color: #bfc9ca">
@@ -50,6 +58,9 @@
 		if(isset($_POST['submit'])){
 			if(isset($_POST['username'], $_POST['password'], $_POST['passwordagain'])){
                 //Check if the username is within the requirements.
+                //sanitizeInputs($_POST['username']);
+                //sanitizeInputs($_POST['password']);
+                //sanitizeInputs($_POST['passwordagain']);
                 if(preg_match('/^[a-zA-Z0-9_\-]*$/',$_POST['username']) && strlen($_POST['username']) > 5 && strlen($_POST['username']) <= 32){
                     //If the username is valid, check to see if it is already in use.
                     $username = $_POST['username'];

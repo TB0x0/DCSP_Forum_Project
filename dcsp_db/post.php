@@ -30,7 +30,7 @@
         }
 
         $conn = new mysqli($hn, $un, $pw, $db);
-			if ($conn->connect_error)
+            if ($conn->connect_error)
                 die($conn->connect_error);
                 
 
@@ -247,13 +247,14 @@
                                     header("Location: post.php?post_id=$postID");
                                     
                                 } else {
-                                    $postErr = "Your comment must be between 5 and 500 characters.";
-                                    $postErrBool = true;
+                                    $commentErrBool = true;
+                                    $commentErr = "Your comment must be between 5 and 500 characters.";
+                                    //echo "Your comment must be between 5 and 500 characters.";
                                     $contents = $_GET['commentcontents'];
                                 }
                             } else {
-                                $postErr = "You must enter a comment.";
-                                $postErrBool = true;
+                                $commentErr = "You must enter a comment.";
+                                $commentErrBool = true;
                                 $contents = $_GET['commentcontents'];
                             }
                         }

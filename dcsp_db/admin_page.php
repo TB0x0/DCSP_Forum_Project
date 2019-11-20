@@ -14,7 +14,7 @@
         session_start();
         require_once('dbfuncs/dbfunctions.php');
         require_once('dbfuncs/dblogin.php');
-
+        //Checking for user type to verify admin status or not
         if(isset($_SESSION['currentUserType'])){
             if ($_SESSION['currentUserType'] == "admin"){
                 $loggedin = true;
@@ -36,7 +36,7 @@
                 
 
     ?>
-
+    <!--Repeated code that initializes the basic UI of the forum with navbar and such Lines 40- -->
     <style>
         @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
 
