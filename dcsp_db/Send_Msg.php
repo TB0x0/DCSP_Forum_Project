@@ -129,7 +129,9 @@
                                         if($recipient == $resultArr['username']){
                                             $msgErr = "";
                                             $msgErrBool = false;
-                                            db_add_message($conn, $recipient, $_SESSION['currentUser'], $_GET['msgcontents']);
+                                            $recipientWithSlashes = addslashes($recipient);
+                                            $msgcontentsWithSlashes = addslashes($_GET['msgcontents']);
+                                            db_add_message($conn, $recipientWithSlashes, $_SESSION['currentUser'], $msgcontentsWithSlashes);
                                             header("Location: inbox_page.php");
                                         } else {
                                             $msgErr = "User does not exist.";
