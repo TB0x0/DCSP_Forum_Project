@@ -49,7 +49,11 @@
 
   </head>
   <body style="background-color: #bfc9ca">
+    <div class="container-fullwidth sticky-top">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="main.php">
+            <img src="stackunderflow.png" width="30" height="30" alt="">Stack Underflow
+        </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -134,24 +138,24 @@
                         if(isset($_GET['submitCommEdit'])){
                             $postID = $_SESSION['postID'];
                             $commentID = $_GET['submitCommEdit'];
+                            $commentErr = "";
+                            $commentErrBool = false;
                             $contents = "";
                             if(isset($_GET['submitCommEdit'])){
                                 if(isset($_GET['commentcontents'])){
                                     if(preg_match('/^(.*)$/ms',$_GET['commentcontents']) && !(ctype_space($_GET['commentcontents'])) && strlen($_GET['commentcontents']) > 5 && strlen($_GET['commentcontents']) <= 500){
-                                //Filtering out special chars to not break MySQL
-                                $commentcontents = filter_var($_GET['commentcontents'], FILTER_SANITIZE_MAGIC_QUOTES);
-                                if(isset($commentcontents)){
-                                    if(preg_match('/^(.*)$/ms',$commentcontents) && !(ctype_space($commentcontents)) && strlen($commentcontents) > 5 && strlen($commentcontents) <= 500){
+                                        $commentErr = "";
+                                        $commentErrBool = false;
                                         //Contents is good
                             
                                         //ALL INFO IS GOOD, ADD THE POST AND FORWARD USER TO IT'S PAGE
                                         db_edit_comment($conn, $commentID, $_GET['commentcontents']);
-                                        db_edit_comment($conn, $commentID, $commentcontents);
                                         header("Location: post.php?post_id=$postID");
                                         
                                     } else {
+                                        $commentErr = "Your comment contents must be between 5 and 500 characters.";
+                                        $commentErrBool = true;
                                         $contents = $_GET['commentcontents'];
-                                        $contents = $commentcontents;
                                     }
                                 }
                             }
@@ -164,17 +168,12 @@
                             if(isset($_GET['submitEdit'])){
                                 if(isset($_GET['postcontents'])){
                                     if(preg_match('/^(.*)$/ms',$_GET['postcontents']) && !(ctype_space($_GET['postcontents'])) && strlen($_GET['postcontents']) > 5 && strlen($_GET['postcontents']) <= 500){
-                                $contents = $_GET['postcontents'];
-                                $contents = filter_var($contents, FILTER_SANITIZE_MAGIC_QUOTES);
-                                if(isset($contents)){
-                                    if(preg_match('/^(.*)$/ms',$contents) && !(ctype_space($contents)) && strlen($contents) > 5 && strlen($contents) <= 500){
                                         $postErr = "";
                                         $postErrBool = false;
                                         //Contents is good
                             
                                         //ALL INFO IS GOOD, ADD THE POST AND FORWARD USER TO IT'S PAGE
                                         db_edit_contents($conn, $postID, $_GET['postcontents']);
-                                        db_edit_contents($conn, $postID, $contents);
                                         header("Location: post.php?post_id=$postID");
                                         
                                     } else {
@@ -182,7 +181,6 @@
                                         $postErrBool = true;
                                         $title = $_GET['posttitle'];
                                         $contents = $_GET['postcontents'];
-                                        $title = filter_var($title, FILTER_SANITIZE_MAGIC_QUOTES);
                                     }
                                 }
                             }
@@ -239,17 +237,12 @@
                         if(isset($_GET['submit'])){
                             if(isset($_GET['commentcontents'])){
                                 if(preg_match('/^(.*)$/ms',$_GET['commentcontents']) && !(ctype_space($_GET['commentcontents'])) && strlen($_GET['commentcontents']) > 5 && strlen($_GET['commentcontents']) <= 500){
-                            $contents = $_GET['commentcontents'];
-                            $contents = filter_var($contents, FILTER_SANITIZE_MAGIC_QUOTES);
-                            if(isset($contents)){
-                                if(preg_match('/^(.*)$/ms',$contents) && !(ctype_space($contents)) && strlen($contents) > 5 && strlen($contents) <= 500){
                                     $commentErr = "";
                                     $commentErrBool = false;
 
                                     $time = time();
                                     $mysqltime = date("Y-m-d H:i:s", $phptime);
                                     db_add_comment($conn, $postID, $_SESSION['currentUser'], $_GET['commentcontents']);
-                                    db_add_comment($conn, $postID, $_SESSION['currentUser'], $contents);
                                     $username = $_SESSION['currentUser'];
                                     $query2 = "SELECT post_id FROM posts where username = '$username'";
                                     $result2 = $conn->query($query2);
@@ -259,13 +252,12 @@
 
                                     $commentErr = "Your comment must be between 5 and 500 characters.";
                                     $commentErrBool = true;
-                                    $commentErr = "Your comment must be between 5 and 500 characters.";
+                                    $contents = $_GET['commentcontents'];
                                 }
                             } else {
                                 $commentErr = "You must enter a comment.";
                                 $commentErrBool = true;
                                 $contents = $_GET['commentcontents'];
-                                $contents = filter_var($contents, FILTER_SANITIZE_MAGIC_QUOTES);
                             }
                         }
                     ?>

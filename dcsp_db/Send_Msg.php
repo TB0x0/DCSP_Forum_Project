@@ -111,15 +111,68 @@
         <div class="row">
             <div class="col-md-9">
                 <div class="container-fullwidth border border-dark border-3 p-3">
+                    <?php
+                        $msgErr = "";
+                        $msgErrBool = false;
+                        $recipient = "";
+                        $msgcontents = "";
+                        if(isset($_GET['submit'])){
+                            if(isset($_GET['recipient'], $_GET['msgcontents'])){
+                                if(preg_match('/^(.*)$/ms',$_GET['msgcontents']) && !(ctype_space($_GET['msgcontents'])) && strlen($_GET['msgcontents']) > 5 && strlen($_GET['msgcontents']) <= 250){
+                                    $msgErr = "";
+                                    $msgErrBool = false;
+                                    $recipient = $_GET['recipient'];
+                                    $query = "SELECT * FROM users WHERE username='$recipient'";
+                                    $result = $conn->query($query);
+                                    if($result){
+                                        $resultArr = $result->fetch_array();
+                                        if($recipient == $resultArr['username']){
+                                            $msgErr = "";
+                                            $msgErrBool = false;
+                                            db_add_message($conn, $recipient, $_SESSION['currentUser'], $_GET['msgcontents']);
+                                            header("Location: inbox_page.php");
+                                        } else {
+                                            $msgErr = "User does not exist.";
+                                            $msgErrBool = true;
+                                            $author = $_GET['recipient'];
+                                            $msgcontents = $_GET['msgcontents'];
+                                        }
+                                    } else {
+                                        $msgErr = "User does not exist.";
+                                        $msgErrBool = true;
+                                        $author = $_GET['recipient'];
+                                        $msgcontents = $_GET['msgcontents'];
+                                    }
+                                } else {
+                                    $msgErr = "Message must be between 5 and 250 characters.";
+                                    $msgErrBool = true;
+                                    $author = $_GET['recipient'];
+                                    $msgcontents = $_GET['msgcontents'];
+                                }
+                            } else {
+                                $msgErr = "Please enter a message and recipient.";
+                                $msgErrBool = true;
+                                $author = $_GET['recipient'];
+                                $msgcontents = $_GET['msgcontents'];
+                            }
+                        }
+                    ?>  
+                    
+                    <?php
+                        if($msgErrBool){
+                            echo "<div class=\"alert alert-danger\" role=\"alert\">Error: $msgErr</div>";
+                        }
+                    ?>
+                    
                     <form action="Send_Msg.php" method="get">
                         <div class="form-group">
-                            <label for="Recipient">Recipient: </label>
-                            <input type="text" class="form-control" name="Recpient" id="Recipient" aria-describedby="Help" placeholder="Recipient">
+                            <label for="recipient">Recipient: </label>
+                            <input type="text" class="form-control" name="recipient" id="recipient" aria-describedby="Help" value="<?=$recipient?>" placeholder="Recipient">
                             <small id="Help" class="form-text text-muted">Enter a username that you want to send a message to</small>
                         </div>
                         <div class="form-group">
                             <label for="msgcontents">Contents: </label>
-                            <textarea class="form-control" name="msgcontents" id="msgcontents" rows="7" placeholder="Message Contents"></textarea>
+                            <textarea class="form-control" name="msgcontents" id="msgcontents" rows="7" placeholder="Message Contents"><?=$msgcontents?></textarea>
                         </div>
                             <button type="submit" id="submit" name="submit" class="btn btn-primary">Submit</button>
                     </form>

@@ -16,8 +16,8 @@ function db_add_comment($connection, $pi, $un, $cn){
     $result = $connection->query($insert_into_comments);
     if (!$result) die($connection->error);}
     
-function db_add_message($connection, $un, $au, $ti, $msg){
-    $insert_into_messages = "INSERT INTO messages (username, author, time, message)"."VALUES('$un','$au','$ti','$msg')";
+function db_add_message($connection, $un, $au, $msg){
+    $insert_into_messages = "INSERT INTO messages (username, author, time, message)"."VALUES('$un','$au',UTC_TIMESTAMP,'$msg')";
     $result = $connection->query($insert_into_messages);
     if (!$result) die($connection->error);}
 
