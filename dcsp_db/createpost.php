@@ -142,7 +142,10 @@
                                     $postErr = "";
                                     $postErrBool = false;
                                     //ALL INFO IS GOOD, ADD THE POST AND FORWARD USER TO IT'S PAGE
-                                    db_add_post($conn, $_SESSION['currentUser'], $_GET['posttitle'], $_GET['postcontents'], $_GET['postcategory']);
+                                    $titleWithSlashes = addslashes($_GET['posttitle']);
+                                    $contentsWithSlashes = addslashes($_GET['postcontents']);
+                                    $categoryWithSlashes = addslashes($_GET['postcategory']);
+                                    db_add_post($conn, $_SESSION['currentUser'], $titleWithSlashes, $contentsWithSlashes, $categoryWithSlashes);
                                     $username = $_SESSION['currentUser'];
                                     $query2 = "SELECT post_id FROM posts where username = '$username'";
                                     $result2 = $conn->query($query2);

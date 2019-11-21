@@ -26,7 +26,6 @@
         } else {
             $loggedin = false;
             $admin = false;
-            header("Location: main.php");
         }
         unset($_SESSION['postID']);
         $conn = new mysqli($hn, $un, $pw, $db);
@@ -112,45 +111,52 @@
             <div class="col-md-9">
                 <div class="container-fullwidth border border-dark border-3 p-3">
                     <?php
-                        
-                        echo "<div class=\"row border border-dark border-3 rounded pt-3 pb-3\" style=\"background-color: #171717\">
-                        <div class=\"col-md-3\">
-                            <h3 class=\"dcsp-text-light\">Inbox</h3>
-                        </div>
-                        <div class=\"col-md-6\"></div>
-                        <div class=\"col-md-3\">";
-                        $recipient = $_SESSION['currentUser'];
-                        $query = "SELECT * FROM messages WHERE username = '$recipient'";
-                        $result = $conn->query($query);
-                        if($result){
-                            $resultArr = $result->fetch_array();
-                            $row_cnt = $result->num_rows;
-                            echo "<p class=\"text-right dcsp-text-light\">" . $row_cnt . " messages</p></div></div>";
+                        if(!$loggedin){
+                            echo "<div class=\"container text-center\">
+                            <h3>You must be logged in to view the inbox!</h3>
+                            <a href=\"login.php\" class=\"btn btn-primary btn-lg active\" role=\"button\" aria-pressed=\"true\">Log in</a>
+                            </div>";
                         } else {
-                            echo "<p class=\"text-right dcsp-text-light\">No messages</p></div></div>";
-                        }
-                        
+                            echo "<div class=\"row border border-dark border-3 rounded pt-3 pb-3\" style=\"background-color: #171717\">
+                            <div class=\"col-md-3\">
+                                <h3 class=\"dcsp-text-light\">Inbox</h3>
+                            </div>
+                            <div class=\"col-md-6\"></div>
+                            <div class=\"col-md-3\">";
+                            $recipient = $_SESSION['currentUser'];
+                            $query = "SELECT * FROM messages WHERE username = '$recipient'";
+                            $result = $conn->query($query);
+                            if($result){
+                                $resultArr = $result->fetch_array();
+                                $row_cnt = $result->num_rows;
+                                echo "<p class=\"text-right dcsp-text-light\">" . $row_cnt . " messages</p></div></div>";
+                            } else {
+                                echo "<p class=\"text-right dcsp-text-light\">No messages</p></div></div>";
+                            }
                             
-                        $query = "SELECT * FROM messages WHERE username = '$recipient' ORDER BY message_id DESC";
-                        $result = $conn->query($query);
-
-                        if($result){
-                            while($resultArr = $result->fetch_array()){
-                                echo "<div class=\"row border border-dark border-3 rounded pt-3 pb-3\" style=\"background-color: #171717\">
-                                <div class=\"col-md-8\">
-                                    <h3 class=\"dcsp-text-light\">From: " . $resultArr['author'] . "</h3>
-                                </div>
-                                <div class=\"col-md-4\">
-                                    <h5 class=\"dcsp-text-light\">At: " . date("Y-M-d H:i:s", strtotime($resultArr['time']) - 6 * 3600 ) . "</h5>
-                                </div>
-                                </div>";
                                 
-                                echo "<div class=\"row border border-dark border-3 rounded ml-3 mr-3 pt-3 pb-3\" style=\"background-color: #bbbbbb\">
-                                <div class=\"col-md-12\">";
-                                echo "<p>" . nl2br($resultArr['message']) . "</p></div></div>";
+                            $query = "SELECT * FROM messages WHERE username = '$recipient' ORDER BY message_id DESC";
+                            $result = $conn->query($query);
 
+                            if($result){
+                                while($resultArr = $result->fetch_array()){
+                                    echo "<div class=\"row border border-dark border-3 rounded pt-3 pb-3\" style=\"background-color: #171717\">
+                                    <div class=\"col-md-8\">
+                                        <h3 class=\"dcsp-text-light\">From: " . $resultArr['author'] . "</h3>
+                                    </div>
+                                    <div class=\"col-md-4\">
+                                        <h5 class=\"dcsp-text-light\">At: " . date("Y-M-d H:i:s", strtotime($resultArr['time']) - 6 * 3600 ) . "</h5>
+                                    </div>
+                                    </div>";
+                                    
+                                    echo "<div class=\"row border border-dark border-3 rounded ml-3 mr-3 pt-3 pb-3\" style=\"background-color: #bbbbbb\">
+                                    <div class=\"col-md-12\">";
+                                    echo "<p>" . nl2br($resultArr['message']) . "</p></div></div>";
+
+                                }
                             }
                         }
+                        
                         
                     ?>
                 </div>

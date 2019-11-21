@@ -69,10 +69,11 @@
         if(isset($_POST['submit'])){
             if(isset($_POST['username'], $_POST['password'])){
                 $username = $_POST['username'];
+                $usernameWithSlashes = addslashes($username);
                 //sanitizeInputs('username');
                 //sanitizeInputs($_POST['password']);
                 //Get the user who's name matches the username given
-                $query = "SELECT * FROM users WHERE username = '$username'";
+                $query = "SELECT * FROM users WHERE username = '$usernameWithSlashes'";
                 //Put result into $userInfo
                 $result = $conn->query($query);
                 $userInfo = $result->fetch_array();

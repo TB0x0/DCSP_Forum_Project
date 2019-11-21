@@ -149,7 +149,8 @@
                                         //Contents is good
                             
                                         //ALL INFO IS GOOD, ADD THE POST AND FORWARD USER TO IT'S PAGE
-                                        db_edit_comment($conn, $commentID, $_GET['commentcontents']);
+                                        $contentsWithSlashes = addslashes($_GET['commentcontents']);
+                                        db_edit_comment($conn, $commentID, $contentsWithSlashes);
                                         header("Location: post.php?post_id=$postID");
                                         
                                     } else {
@@ -173,7 +174,8 @@
                                         //Contents is good
                             
                                         //ALL INFO IS GOOD, ADD THE POST AND FORWARD USER TO IT'S PAGE
-                                        db_edit_contents($conn, $postID, $_GET['postcontents']);
+                                        $postContentsWithSlashes = addslashes($_GET['postcontents']);
+                                        db_edit_contents($conn, $postID, $postContentsWithSlashes);
                                         header("Location: post.php?post_id=$postID");
                                         
                                     } else {
@@ -242,7 +244,8 @@
 
                                     $time = time();
                                     $mysqltime = date("Y-m-d H:i:s", $phptime);
-                                    db_add_comment($conn, $postID, $_SESSION['currentUser'], $_GET['commentcontents']);
+                                    $commentContentsWithSlashes = addslashes($_GET['commentcontents']);
+                                    db_add_comment($conn, $postID, $_SESSION['currentUser'], $commentContentsWithSlashes);
                                     $username = $_SESSION['currentUser'];
                                     $query2 = "SELECT post_id FROM posts where username = '$username'";
                                     $result2 = $conn->query($query2);
