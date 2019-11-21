@@ -19,14 +19,19 @@
             require_once('dbfuncs/dblogin.php');
         ?>
 		
+        
         <?php   
 			session_start();
 			$conn = new mysqli($hn, $un, $pw, $db);
 			if ($conn->connect_error)
+            session_start();
+            $conn = new mysqli($hn, $un, $pw, $db);
+            if ($conn->connect_error)
                 die($conn->connect_error);
             unset($_SESSION['postID']);
 
             function sanitizeInputs($var){
+                $var = trim($var);
                 $var = stripslashes($var);
                 $var = strip_tags($var);
                 $var = htmlentities($var);
@@ -34,12 +39,14 @@
                 return $var;
             }
 		?>
+        ?>
     </head>
     <body style="background-color: #bfc9ca">
         <?php
             $sal1 = "zx&h^"; 
             $sal2 = "qp%@&";
 			$errorVal = "";
+            $errorVal = "";
             $userVal = "";
             $passVal = "";
             $passagainVal = "";
@@ -57,13 +64,19 @@
         
 		if(isset($_POST['submit'])){
 			if(isset($_POST['username'], $_POST['password'], $_POST['passwordagain'])){
+        if(isset($_POST['submit'])){
+            if(isset($_POST['username'], $_POST['password'], $_POST['passwordagain'])){
                 //Check if the username is within the requirements.
                 //sanitizeInputs($_POST['username']);
                 //sanitizeInputs($_POST['password']);
                 //sanitizeInputs($_POST['passwordagain']);
                 if(preg_match('/^[a-zA-Z0-9_\-]*$/',$_POST['username']) && strlen($_POST['username']) > 5 && strlen($_POST['username']) <= 32){
+                $username = sanitizeInputs($_POST['username']);
+                //$password = sanitizeInputs($_POST['password']);
+                //$passwordagain = sanitizeInputs($_POST['passwordagain']);
+                if(preg_match('/^[a-zA-Z0-9_\-]*$/',$username) && strlen($username) > 5 && strlen($username) <= 32){
                     //If the username is valid, check to see if it is already in use.
-                    $username = $_POST['username'];
+                    //$username = $_POST['username'];
                     $query = "SELECT * FROM users WHERE username = '$username'";
                     $result = $conn->query($query);
                     $resultArr = $result->fetch_array();
@@ -113,21 +126,12 @@
 				$errorVal = "Please enter a username, and password.";
 			}
 		}
+            } else {
+                $errorVal = "Please enter a username, and password.";
+            }
+        }
         ?>
-        <div class="container-fullwidth sticky-top">
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-                <a class="navbar-brand" href="main.php">
-                    <img src="stackunderflow.png" width="30" height="30" alt="">Stack Underflow
-                </a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNavDropdown">
-                    <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="main.php">Home <span class="sr-only">(current)</span></a>
-                    </li>
-                </div>
             </nav>
         </div>
         <div class="text-center container" style="background-color: #abb2b9">
@@ -153,6 +157,7 @@
         </p>
         </div>
 	</body>
+    </body>
 
 
     <!-- Optional JavaScript -->
