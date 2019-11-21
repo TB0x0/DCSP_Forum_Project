@@ -31,7 +31,6 @@
         unset($_SESSION['postID']);
         $conn = new mysqli($hn, $un, $pw, $db);
 			if ($conn->connect_error)
-            if ($conn->connect_error)
                 die($conn->connect_error);
                 
         $categories = array("Questions", "General", "Off-Topic");
@@ -56,7 +55,11 @@
                 echo "<script type='text/javascript'>alert('$msg');</script>";
             }
         ?>
+    <div class="container-fullwidth sticky-top">
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="main.php">
+            <img src="stackunderflow.png" width="30" height="30" alt="">Stack Underflow
+        </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -122,20 +125,12 @@
         if(isset($_GET['submit'])){
 			if(isset($_GET['postcategory'], $_GET['posttitle'], $_GET['postcontents'])){
                 if(preg_match('/^(.*)$/ms',$_GET['posttitle']) && !(ctype_space($_GET['posttitle'])) && strlen($_GET['posttitle']) > 5 && strlen($_GET['posttitle']) <= 64){
-            $postcontents = $_GET['postcontents'];
-            $postcontents = filter_var($postcontents, FILTER_SANITIZE_MAGIC_QUOTES);
-            $posttitle = $_GET['posttitle'];
-            $posttitle = filter_var($posttitle, FILTER_SANITIZE_MAGIC_QUOTES);
-            if(isset($_GET['postcategory'], $posttitle, $postcontents)){
-                if(preg_match('/^(.*)$/ms',$posttitle) && !(ctype_space($posttitle)) && strlen($posttitle) > 5 && strlen($posttitle) <= 64){
                     $postErr = "";
                     $postErrBool = false;
                     //Title is good
                     if(preg_match('/^(.*)$/ms',$_GET['postcontents']) && !(ctype_space($_GET['postcontents'])) && strlen($_GET['postcontents']) > 5 && strlen($_GET['postcontents']) <= 500){
-                    if(preg_match('/^(.*)$/ms',$postcontents) && !(ctype_space($postcontents)) && strlen($postcontents) > 5 && strlen($postcontents) <= 500){
                         $postErr = "";
                         $postErrBool = false;
-                        //echo $postcontents;
                         //Contents is good
 
                         // $query = "SELECT DISTINCT category FROM posts";
@@ -148,7 +143,6 @@
                                     $postErrBool = false;
                                     //ALL INFO IS GOOD, ADD THE POST AND FORWARD USER TO IT'S PAGE
                                     db_add_post($conn, $_SESSION['currentUser'], $_GET['posttitle'], $_GET['postcontents'], $_GET['postcategory']);
-                                    db_add_post($conn, $_SESSION['currentUser'], $posttitle, $postcontents, $_GET['postcategory']);
                                     $username = $_SESSION['currentUser'];
                                     $query2 = "SELECT post_id FROM posts where username = '$username'";
                                     $result2 = $conn->query($query2);
@@ -166,7 +160,7 @@
                             $postErr = "Invalid category.";
                             $postErrBool = true;
                             $title = $_GET['posttitle'];
-                            $contents = $postcontents;
+                            $contents = $_GET['postcontents'];
                         //}
                         
                     } else {
@@ -174,25 +168,18 @@
                         $postErrBool = true;
                         $title = $_GET['posttitle'];
                         $contents = $_GET['postcontents'];
-                        $title = filter_var($title, FILTER_SANITIZE_MAGIC_QUOTES);
-                        $contents = $postcontents;
                     }
                 } else {
                     $postErr = "You must enter a title for your post between 5 and 64 characters.";
                     $postErrBool = true;
                     $title = $_GET['posttitle'];
                     $contents = $_GET['postcontents'];
-                    $title = filter_var($title, FILTER_SANITIZE_MAGIC_QUOTES);
-                    $contents = $postcontents;
                 }
 			} else {
-            } else {
                 $postErr = "You must choose a category, and enter a title and contents.";
                 $postErrBool = true;
                 $title = $_GET['posttitle'];
                 $contents = $_GET['postcontents'];
-                $title = filter_var($title, FILTER_SANITIZE_MAGIC_QUOTES);
-                $contents = $postcontents;
             }
         }
     ?>
