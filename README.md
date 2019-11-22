@@ -4,7 +4,7 @@
 - [x] Front-end prototyping and function implementation
 - [x] Home page
 - [x] View detailed post and comments page
-- [ ] View inbox page
+- [x] View inbox page
 - [x] Search page
 
 
