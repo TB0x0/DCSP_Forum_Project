@@ -77,7 +77,7 @@
                     Account
                     </a>
                     <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdownMenuLink\">
-                    <a class=\"dropdown-item\" href=\"#\">Edit Account</a>
+                    <a class=\"dropdown-item\" href=\"editaccount.php\">Edit Account</a>
                     <a class=\"dropdown-item\" href=\"logout.php\">Log out</a>
                     </div>
                     </li>";
@@ -87,7 +87,7 @@
                     Account
                     </a>
                     <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdownMenuLink\">
-                    <a class=\"dropdown-item\" href=\"#\">Edit Account</a>
+                    <a class=\"dropdown-item\" href=\"editaccount.php\">Edit Account</a>
                     <a class=\"dropdown-item\" href=\"admin_page.php\">Admin Page</a>
                     <a class=\"dropdown-item\" href=\"logout.php\">Log out</a>
                     </div>
@@ -119,7 +119,7 @@
             <div class="col-md-9">
                 <div class="container-fullwidth border border-dark border-3 p-3">
 
-                    <?
+                    <?php
                         //Called if user tries to delete a comment
                         if(isset($_GET['deleteComment'])){
                             $postID = $_SESSION['postID'];
@@ -261,8 +261,6 @@
                                     $commentErr = "";
                                     $commentErrBool = false;
 
-                                    $time = time();
-                                    $mysqltime = date("Y-m-d H:i:s", $phptime);
                                     //Sanitize by adding backslashes to special chars, preventing issues with the SQL
                                     $commentContentsWithSlashes = addslashes($_GET['commentcontents']);
                                     db_add_comment($conn, $postID, $_SESSION['currentUser'], $commentContentsWithSlashes);
