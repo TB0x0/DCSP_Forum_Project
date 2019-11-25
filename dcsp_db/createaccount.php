@@ -37,9 +37,11 @@
     </head>
     <body style="background-color: #bfc9ca">
         <?php
+            //Vars for the functions
             $sal1 = "zx&h^"; 
             $sal2 = "qp%@&";
-			$errorVal = "";
+            $errorVal = "";
+            $successVal = "";
             $userVal = "";
             $passVal = "";
             $passagainVal = "";
@@ -54,13 +56,15 @@
         }
          
 
-        
+        //On submit new account
 		if(isset($_POST['submit'])){
 			if(isset($_POST['username'], $_POST['password'], $_POST['passwordagain'])){
                 //Check if the username is within the requirements.
                 //sanitizeInputs($_POST['username']);
                 //sanitizeInputs($_POST['password']);
                 //sanitizeInputs($_POST['passwordagain']);
+
+                //Username must contain only letters, numbers, hyphens and underscores.
                 if(preg_match('/^[a-zA-Z0-9_\-]*$/',$_POST['username']) && strlen($_POST['username']) > 5 && strlen($_POST['username']) <= 32){
                     //If the username is valid, check to see if it is already in use.
                     $username = $_POST['username'];
@@ -70,6 +74,7 @@
                     //If the name is already being used, display the error. Else, continue checking the input.
                     if($resultArr['username'] == $username){
                         $errorVal = "That username is already taken.";
+                        $successVal = "";
                         $userVal = $_POST['username'];
                         $passagainVal = $_POST['passwordagain'];
                         $passVal = $_POST['password'];
@@ -82,6 +87,7 @@
                         //True if the password does NOT comply with the requirements.
                         if(!$uppercase || !$lowercase || !$number || !$specialChars || strlen($_POST['password']) > 32 || strlen($_POST['password']) < 8) {
                             $errorVal = "Password must be between 8 and 32 characters and have at least one of each: uppercase, lowercase, number, special character.";
+                            $successVal = "";
                             $userVal = $_POST['username'];
                             $passagainVal = $_POST['passwordagain'];
                             $passVal = $_POST['password'];
@@ -93,10 +99,11 @@
                                 $token = (hash('ripemd128', "$sal1$password$sal2"));
                                 db_add_user($conn, $_POST['username'], "user", $token);
                                 //Forward the user to log in.
-                                echo "Account created, redirecting you to log in.";
+                                $successVal = "Account created, redirecting you to login.";
                                 header("refresh:3; url=login.php");
                             } else {
                                 $errorVal = "Passwords do not match.";
+                                $successVal = "";
                                 $userVal = $_POST['username'];
                                 $passagainVal = $_POST['passwordagain'];
                                 $passVal = $_POST['password'];
@@ -105,15 +112,18 @@
                     }                  
                 } else {
                     $errorVal = "Username must be 6-32 letters, numbers, spaces, hyphens, and underscores only.";
+                    $successVal = "";
                     $userVal = $_POST['username'];
                     $passagainVal = $_POST['passwordagain'];
                     $passVal = $_POST['password'];
                 }
 		    } else {
-				$errorVal = "Please enter a username, and password.";
+                $errorVal = "Please enter a username, and password.";
+                $successVal = "";
 			}
 		}
         ?>
+        <!--NavBar-->
         <div class="container-fullwidth sticky-top">
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
                 <a class="navbar-brand" href="main.php">
@@ -130,14 +140,21 @@
                 </div>
             </nav>
         </div>
+        <!--Main-->
         <div class="text-center container" style="background-color: #abb2b9">
         <h1>Create an account on <span style="font-style:italic; font-weight:bold; color: maroon">
                 Stack Underflow</span>!</h1>
                 
-        <p style="color: red">
-        <?=$errorVal?>
-        </p>
+        <?php
+            //Handle fails and success condition messages
+            if($errorVal != ""){
+                echo "<div class=\"alert alert-danger\" role=\"alert\">$errorVal</div>";
+            } else if($successVal != ""){
+                echo "<div class=\"alert alert-success\" role=\"alert\">$successVal</div>";
+            }
+        ?>
         
+        <!--Form-->
         <form method="post" action="createaccount.php">
             <label>Username: </label>
             <input type="text" name="username" value="<?=$userVal?>"> <br>

@@ -15,6 +15,7 @@
         require_once('dbfuncs/dbfunctions.php');
         require_once('dbfuncs/dblogin.php');
 
+        //Login state Vars
         if(isset($_SESSION['currentUserType'])){
             if ($_SESSION['currentUserType'] == "admin"){
                 $loggedin = true;
@@ -49,6 +50,7 @@
   </head>
   <body style="background-color: #bfc9ca">
     <div class="container-fullwidth sticky-top">
+        <!--NavBar-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="main.php">
             <img src="stackunderflow.png" width="30" height="30" alt="">Stack Underflow
@@ -110,12 +112,14 @@
         </nav>
     </div>
     
+    <!--Main-->
     <div class="container pt-5" style="background-color: #abb2b9">
         <div class="row">
             <div class="col-md-9">
                 <div class="container-fullwidth border border-dark border-3 p-3">
 
                     <?php
+                        //Vars
                         $oldPassVal ="";
                         $successVal ="";
                         $errorVal ="";
@@ -126,6 +130,7 @@
 
                         if(isset($_POST['submit'])){
                             if(isset($_POST['currentpassword'], $_POST['password'], $_POST['passwordagain'])){
+                                //Get the data entered. Hash old and new passwords
                                 $password = $_POST['currentpassword'];
                                 $newPassword = $_POST['password'];
                                 $username = $_SESSION['currentUser'];
@@ -198,6 +203,7 @@
                     </div>
                     
                     <?php
+                        //Handle error and success messages
                         if($errorVal != ""){
                             echo "<div class=\"alert alert-danger\" role=\"alert\">$errorVal</div>";
                         } else if($successVal != ""){
@@ -205,6 +211,7 @@
                         }
                     ?>
 
+                    <!--Form-->
                     <form method="post" action="editaccount.php">
                         <div class="form-group form-row">
                             <label>Current Password: </label>

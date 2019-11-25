@@ -14,7 +14,7 @@
         session_start();
         require_once('dbfuncs/dbfunctions.php');
         require_once('dbfuncs/dblogin.php');
-
+        //Handle login state
         if(isset($_SESSION['currentUserType'])){
             if ($_SESSION['currentUserType'] == "admin"){
                 $loggedin = true;
@@ -46,6 +46,7 @@
   </head>
   <body style="background-color: #bfc9ca">
     <div class="container-fullwidth sticky-top">
+        <!--NavBar-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="main.php">
             <img src="stackunderflow.png" width="30" height="30" alt="">Stack Underflow
@@ -106,17 +107,20 @@
         </form>
         </nav>
     </div>
+    <!--Main-->
     <div class="container pt-5" style="background-color: #abb2b9">
         <div class="row">
             <div class="col-md-9">
                 <div class="container-fullwidth border border-dark border-3 p-3">
                     <?php
+                        //Direct user to login if they're a guest
                         if(!$loggedin){
                             echo "<div class=\"container text-center\">
                             <h3>You must be logged in to view the inbox!</h3>
                             <a href=\"login.php\" class=\"btn btn-primary btn-lg active\" role=\"button\" aria-pressed=\"true\">Log in</a>
                             </div>";
                         } else {
+                            //Show total number of messages in inbox
                             echo "<div class=\"row border border-dark border-3 rounded pt-3 pb-3\" style=\"background-color: #171717\">
                             <div class=\"col-md-3\">
                                 <h3 class=\"dcsp-text-light\">Inbox</h3>
@@ -134,12 +138,13 @@
                                 echo "<p class=\"text-right dcsp-text-light\">No messages</p></div></div>";
                             }
                             
-                                
+                            //Get every message sent to the user
                             $query = "SELECT * FROM messages WHERE username = '$recipient' ORDER BY message_id DESC";
                             $result = $conn->query($query);
 
                             if($result){
                                 while($resultArr = $result->fetch_array()){
+                                    //Display every message's author, timestamp, and contents
                                     echo "<div class=\"row border border-dark border-3 rounded pt-3 pb-3\" style=\"background-color: #171717\">
                                     <div class=\"col-md-8\">
                                         <h3 class=\"dcsp-text-light\">From: " . $resultArr['author'] . "</h3>

@@ -16,6 +16,7 @@
         require_once('dbfuncs/dbfunctions.php');
         require_once('dbfuncs/dblogin.php');
 
+        //Handle Login state
         if(isset($_SESSION['currentUserType'])){
             if ($_SESSION['currentUserType'] == "admin"){
                 $loggedin = true;
@@ -52,6 +53,7 @@
     
 <body style="background-color: #bfc9ca">
     <div class="container-fullwidth sticky-top">
+        <!--NavBar-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="main.php">
             <img src="stackunderflow.png" width="30" height="30" alt="">Stack Underflow
@@ -112,39 +114,42 @@
         </form>
         </nav>
     </div>
-    <h3 text_align="center">Search Results</h3>
-    <?php
-        $srchvar = $_GET['search_var'];
-        $srchvarWithSlashes = addslashes($_GET['search_var']);
-        $query = "SELECT * FROM posts WHERE post_title LIKE '%$srchvarWithSlashes%' OR username LIKE '%$srchvarWithSlashes%'";
-        $result = $conn->query($query);
-
-        if($result){
-            $tmpVal = 0;
-            while(($resultArr = $result->fetch_array()) && $tmpVal < 5){
-                echo "<div class=\"row border border-dark border-3 rounded ml-3 mr-3 pt-3 pb-3\" style=\"background-color: #bbbbbb\">
-                <div class=\"col-md-6 text-truncate\">";
-                    $postID = $resultArr['post_id'];
-                    echo "<a href=\"post.php?post_id=" . $postID . "\" class=\"text-info stretched-link\" style=\"font-family: 'Roboto', sans-serif; font-size: 20px;\">" . $resultArr['post_title'] . "</a>";
-                echo "</div>
-                <div class=\"col-md-2 text-truncate\">";
-                    echo "<p>Posted by: " . $resultArr['username'] . "</p>";
-                echo "</div>
-                <div class=\"col-md-2\">";
-                    echo date("Y-M-d H:i:s", strtotime($resultArr['time']) - 6 * 3600 );
-                echo "</div>
-                <div class=\"col-md-2\">";
-                    $postID = $resultArr['post_id'];
-                    $queryComments = "SELECT * FROM comments WHERE post_id = '$postID'";
-                    $resultComments = $conn->query($queryComments);
-                    echo "<p>Comments: " . $resultComments->num_rows . "</p>";
-                echo "</div>
-                </div>";
-
-                $tmpVal += 1;
+    <!--Main-->
+    <div class="container pt-5" style="background-color: #abb2b9">
+        <h3 style="text-align: center;">Search Results</h3>
+        <?php
+            //Get all posts matching the search term, also, any post
+            // where author matches search term
+            $srchvar = $_GET['search_var'];
+            $srchvarWithSlashes = addslashes($_GET['search_var']);
+            $query = "SELECT * FROM posts WHERE post_title LIKE '%$srchvarWithSlashes%' OR username LIKE '%$srchvarWithSlashes%'";
+            $result = $conn->query($query);
+            //Display results
+            if($result){
+                while(($resultArr = $result->fetch_array())){
+                    echo "<div class=\"row border border-dark border-3 rounded ml-3 mr-3 pt-3 pb-3\" style=\"background-color: #bbbbbb\">
+                    <div class=\"col-md-6 text-truncate\">";
+                        $postID = $resultArr['post_id'];
+                        echo "<a href=\"post.php?post_id=" . $postID . "\" class=\"text-info stretched-link\" style=\"font-family: 'Roboto', sans-serif; font-size: 20px;\">" . $resultArr['post_title'] . "</a>";
+                    echo "</div>
+                    <div class=\"col-md-2 text-truncate\">";
+                        echo "<p>Posted by: " . $resultArr['username'] . "</p>";
+                    echo "</div>
+                    <div class=\"col-md-2\">";
+                        echo date("Y-M-d H:i:s", strtotime($resultArr['time']) - 6 * 3600 );
+                    echo "</div>
+                    <div class=\"col-md-2\">";
+                        $postID = $resultArr['post_id'];
+                        $queryComments = "SELECT * FROM comments WHERE post_id = '$postID'";
+                        $resultComments = $conn->query($queryComments);
+                        echo "<p>Comments: " . $resultComments->num_rows . "</p>";
+                    echo "</div>
+                    </div>";
+                }
             }
-        }
-    ?>
+        ?>
+    </div>
+    
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
