@@ -14,7 +14,7 @@
         session_start();
         require_once('dbfuncs/dbfunctions.php');
         require_once('dbfuncs/dblogin.php');
-
+        //Handle login states
         if(isset($_SESSION['currentUserType'])){
             if ($_SESSION['currentUserType'] == "admin"){
                 $loggedin = true;
@@ -47,6 +47,7 @@
   </head>
   <body style="background-color: #bfc9ca">
     <div class="container-fullwidth sticky-top">
+        <!--NavBar-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="main.php">
             <img src="stackunderflow.png" width="30" height="30" alt="">Stack Underflow
@@ -72,7 +73,7 @@
                     Account
                     </a>
                     <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdownMenuLink\">
-                    <a class=\"dropdown-item\" href=\"#\">Edit Account</a>
+                    <a class=\"dropdown-item\" href=\"editaccount.php\">Edit Account</a>
                     <a class=\"dropdown-item\" href=\"logout.php\">Log out</a>
                     </div>
                     </li>";
@@ -82,7 +83,7 @@
                     Account
                     </a>
                     <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdownMenuLink\">
-                    <a class=\"dropdown-item\" href=\"#\">Edit Account</a>
+                    <a class=\"dropdown-item\" href=\"editaccount.php\">Edit Account</a>
                     <a class=\"dropdown-item\" href=\"admin_page.php\">Ban User</a>
                     <a class=\"dropdown-item\" href=\"logout.php\">Log out</a>
                     </div>
@@ -107,32 +108,46 @@
         </form>
         </nav>
     </div>
+    <!--Main-->
     <div class="container pt-5" style="background-color: #abb2b9">
         <div class="row">
             <div class="col-md-9">
                 <div class="container-fullwidth border border-dark border-3 p-3">
                     <?php
+                        //Init Vars
                         $msgErr = "";
                         $msgErrBool = false;
                         $recipient = "";
                         $msgcontents = "";
                         if(isset($_GET['submit'])){
                             if(isset($_GET['recipient'], $_GET['msgcontents'])){
+                                //Message contents must be any string 6-250 characters, and not only whitespace
                                 if(preg_match('/^(.*)$/ms',$_GET['msgcontents']) && !(ctype_space($_GET['msgcontents'])) && strlen($_GET['msgcontents']) > 5 && strlen($_GET['msgcontents']) <= 250){
                                     $msgErr = "";
                                     $msgErrBool = false;
+                                    //Get the recipient
                                     $recipient = $_GET['recipient'];
-                                    $query = "SELECT * FROM users WHERE username='$recipient'";
-                                    $result = $conn->query($query);
-                                    if($result){
-                                        $resultArr = $result->fetch_array();
-                                        if($recipient == $resultArr['username']){
-                                            $msgErr = "";
-                                            $msgErrBool = false;
-                                            $recipientWithSlashes = addslashes($recipient);
-                                            $msgcontentsWithSlashes = addslashes($_GET['msgcontents']);
-                                            db_add_message($conn, $recipientWithSlashes, $_SESSION['currentUser'], $msgcontentsWithSlashes);
-                                            header("Location: inbox_page.php");
+                                    if(preg_match('/^(.*)$/ms',$_GET['recipient']) && !(ctype_space($_GET['recipient'])) && strlen($_GET['recipient']) > 4 && strlen($_GET['recipient']) <= 32){
+                                        $query = "SELECT * FROM users WHERE username='$recipient'";
+                                        $result = $conn->query($query);
+                                        if($result){
+                                            $resultArr = $result->fetch_array();
+                                            //If user exists...
+                                            if($recipient == $resultArr['username']){
+                                                //Send the message to that user
+                                                $msgErr = "";
+                                                $msgErrBool = false;
+                                                $recipientWithSlashes = addslashes($recipient);
+                                                $msgcontentsWithSlashes = addslashes($_GET['msgcontents']);
+                                                db_add_message($conn, $recipientWithSlashes, $_SESSION['currentUser'], $msgcontentsWithSlashes);
+                                                //Go back to inbox
+                                                header("Location: inbox_page.php");
+                                            } else {
+                                                $msgErr = "User does not exist.";
+                                                $msgErrBool = true;
+                                                $author = $_GET['recipient'];
+                                                $msgcontents = $_GET['msgcontents'];
+                                            }
                                         } else {
                                             $msgErr = "User does not exist.";
                                             $msgErrBool = true;
@@ -140,7 +155,7 @@
                                             $msgcontents = $_GET['msgcontents'];
                                         }
                                     } else {
-                                        $msgErr = "User does not exist.";
+                                        $msgErr = "Recipient must be 6-32 characters.";
                                         $msgErrBool = true;
                                         $author = $_GET['recipient'];
                                         $msgcontents = $_GET['msgcontents'];
@@ -161,11 +176,13 @@
                     ?>  
                     
                     <?php
+                        //Handle error messages
                         if($msgErrBool){
                             echo "<div class=\"alert alert-danger\" role=\"alert\">Error: $msgErr</div>";
                         }
                     ?>
                     
+                    <!--Form-->
                     <form action="Send_Msg.php" method="get">
                         <div class="form-group">
                             <label for="recipient">Recipient: </label>

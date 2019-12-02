@@ -16,6 +16,7 @@
         require_once('dbfuncs/dbfunctions.php');
         require_once('dbfuncs/dblogin.php');
 
+        //Handle login state
         if(isset($_SESSION['currentUserType'])){
             if ($_SESSION['currentUserType'] == "admin"){
                 $loggedin = true;
@@ -32,7 +33,8 @@
         $conn = new mysqli($hn, $un, $pw, $db);
 			if ($conn->connect_error)
                 die($conn->connect_error);
-                
+        
+        //Hard coded categories
         $categories = array("Questions", "General", "Off-Topic");
         
     ?>
@@ -48,14 +50,8 @@
 
   </head>
   <body style="background-color: #bfc9ca">
-        <?php
-            
-
-            function alert($msg) {
-                echo "<script type='text/javascript'>alert('$msg');</script>";
-            }
-        ?>
     <div class="container-fullwidth sticky-top">
+        <!--NavBar-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="main.php">
             <img src="stackunderflow.png" width="30" height="30" alt="">Stack Underflow
@@ -81,7 +77,7 @@
                     Account
                     </a>
                     <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdownMenuLink\">
-                    <a class=\"dropdown-item\" href=\"#\">Edit Account</a>
+                    <a class=\"dropdown-item\" href=\"editaccount.php\">Edit Account</a>
                     <a class=\"dropdown-item\" href=\"logout.php\">Log out</a>
                     </div>
                     </li>";
@@ -91,7 +87,7 @@
                     Account
                     </a>
                     <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdownMenuLink\">
-                    <a class=\"dropdown-item\" href=\"#\">Edit Account</a>
+                    <a class=\"dropdown-item\" href=\"editaccount.php\">Edit Account</a>
                     <a class=\"dropdown-item\" href=\"admin_page.php\">Admin Page</a>
                     <a class=\"dropdown-item\" href=\"logout.php\">Log out</a>
                     </div>
@@ -117,55 +113,56 @@
         </nav>
     </div>
 
+    <!--Main-->
     <?php
+        //Vars
         $postErr = "";
         $postErrBool = false;
         $title = "";
         $contents = "";
         if(isset($_GET['submit'])){
 			if(isset($_GET['postcategory'], $_GET['posttitle'], $_GET['postcontents'])){
+                //Title must be any string from 6 to 64 chars, but not just whitespace
                 if(preg_match('/^(.*)$/ms',$_GET['posttitle']) && !(ctype_space($_GET['posttitle'])) && strlen($_GET['posttitle']) > 5 && strlen($_GET['posttitle']) <= 64){
                     $postErr = "";
                     $postErrBool = false;
                     //Title is good
+                    //Contents must be any string from 6 to 500 chars, but not just whitespace
                     if(preg_match('/^(.*)$/ms',$_GET['postcontents']) && !(ctype_space($_GET['postcontents'])) && strlen($_GET['postcontents']) > 5 && strlen($_GET['postcontents']) <= 500){
                         $postErr = "";
                         $postErrBool = false;
                         //Contents is good
-
-                        // $query = "SELECT DISTINCT category FROM posts";
-                        // $result = $conn->query($query);
-                        // if($result){
-                        //     while($resultArr = $result->fetch_array()){
-                            foreach($categories as $category){
-                                if($_GET['postcategory'] == $category){
-                                    $postErr = "";
-                                    $postErrBool = false;
-                                    //ALL INFO IS GOOD, ADD THE POST AND FORWARD USER TO IT'S PAGE
-                                    $titleWithSlashes = addslashes($_GET['posttitle']);
-                                    $contentsWithSlashes = addslashes($_GET['postcontents']);
-                                    $categoryWithSlashes = addslashes($_GET['postcategory']);
-                                    db_add_post($conn, $_SESSION['currentUser'], $titleWithSlashes, $contentsWithSlashes, $categoryWithSlashes);
-                                    $username = $_SESSION['currentUser'];
-                                    $query2 = "SELECT post_id FROM posts where username = '$username'";
-                                    $result2 = $conn->query($query2);
-                                    if($result2){
-                                        $newestPost = 0;
-                                        while($resultArr2 = $result2->fetch_array()){
-                                            if($resultArr2['post_id'] > $newestPost){
-                                                $newestPost = $resultArr2['post_id'];
-                                            }
+                        foreach($categories as $category){
+                            //Check that the category entered matches a valid category
+                            if($_GET['postcategory'] == $category){
+                                $postErr = "";
+                                $postErrBool = false;
+                                //ALL INFO IS GOOD, ADD THE POST AND FORWARD USER TO IT'S PAGE
+                                //Sanitize Input for the SQL
+                                $titleWithSlashes = addslashes($_GET['posttitle']);
+                                $contentsWithSlashes = addslashes($_GET['postcontents']);
+                                $categoryWithSlashes = addslashes($_GET['postcategory']);
+                                db_add_post($conn, $_SESSION['currentUser'], $titleWithSlashes, $contentsWithSlashes, $categoryWithSlashes);
+                                //Get newest post from the user (which is the one they just made.)
+                                //Go to that page.
+                                $username = $_SESSION['currentUser'];
+                                $query2 = "SELECT post_id FROM posts where username = '$username'";
+                                $result2 = $conn->query($query2);
+                                if($result2){
+                                    $newestPost = 0;
+                                    while($resultArr2 = $result2->fetch_array()){
+                                        if($resultArr2['post_id'] > $newestPost){
+                                            $newestPost = $resultArr2['post_id'];
                                         }
                                     }
-                                    header("Location: post.php?post_id=$newestPost");
                                 }
+                                header("Location: post.php?post_id=$newestPost");
                             }
-                            $postErr = "Invalid category.";
-                            $postErrBool = true;
-                            $title = $_GET['posttitle'];
-                            $contents = $_GET['postcontents'];
-                        //}
-                        
+                        }
+                        $postErr = "Invalid category.";
+                        $postErrBool = true;
+                        $title = $_GET['posttitle'];
+                        $contents = $_GET['postcontents'];
                     } else {
                         $postErr = "Your post contents must be between 5 and 500 characters.";
                         $postErrBool = true;
@@ -194,7 +191,7 @@
                 <div class="container-fullwidth border border-dark border-3 p-3">
 
                     <?php
-
+                        //Direct user to login page if they are a guest
                         if(!$loggedin){
                             echo "<div class=\"container text-center\">
                             <h3>You must be logged in to create a post!</h3>
@@ -203,22 +200,15 @@
                         } else {
                             echo "<div class=\"container\">";
                             if($postErrBool){
-                            echo "<div class=\"alert alert-danger\" role=\"alert\">Error: $postErr</div>";
+                                //Handle Error message
+                                echo "<div class=\"alert alert-danger\" role=\"alert\">Error: $postErr</div>";
                             }
-                                
+                            //Form 
                             echo "<form action=\"createpost.php\" method=\"get\">
                                 <div class =\"form-group\">
                                     <label for=\"postcategory\">Category: </label>
                                     <select class=\"category-select\" name=\"postcategory\" id=\"postcategory\">";
-                                        // $query = "SELECT DISTINCT category FROM posts";
-                                        // $result = $conn->query($query);
-            
-                                        // if($result){
-                                        //     while($resultArr = $result->fetch_array()){
-                                        //         echo "<option value=\"" . $resultArr['category'] . "\">" . $resultArr['category'] . "</option>";
-                                        //     }
-                                        // }
-                                        
+                                        //Drop down menu for category selection
                                         foreach($categories as $category){
                                             echo "<option value=\"" . $category . "\">" . $category . "</option>";
                                         }

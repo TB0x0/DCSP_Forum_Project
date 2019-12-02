@@ -18,6 +18,7 @@
 		session_destroy();
         
     ?> 
+    <!--NavBar-->
     <body style="background-color: #bfc9ca">
         <div class="container-fullwidth sticky-top">
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -35,6 +36,7 @@
                 </div>
             </nav>
         </div>
+        <!--Main-->
         <div class="text-center container" style="background-color: #abb2b9">
             <h1>Logged Out</h1>
             <p>
@@ -43,7 +45,7 @@
             <p>
                 Redirecting you to the main page...
                 <?php
-                header("refresh:3; url=main.php");
+                header("refresh:2; url=main.php");
                 ?>
             </p>
         </div>

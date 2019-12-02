@@ -50,6 +50,7 @@
     </head>
     <body style="background-color: #bfc9ca">
         <?php
+            //Init Vars
             $sal1 = "zx&h^"; 
             $sal2 = "qp%@&";
             $errorVal = "";
@@ -105,6 +106,7 @@
         }
         ?>
         <div class="container-fullwidth sticky-top">
+            <!--NavBar-->
             <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <a class="navbar-brand" href="main.php">
                 <img src="stackunderflow.png" width="30" height="30" alt="">Stack Underflow
@@ -120,14 +122,18 @@
             </div>
             </nav>
         </div>
+        <!--Main-->
         <div class="text-center container" style="background-color: #abb2b9">
             <h1>Welcome to <span style="font-style:italic; font-weight:bold; color: maroon">
                     Stack Underflow</span>!</h1>
                     
-            <p style="color: red">
-            <?=$errorVal?>
-            </p>
-            
+            <?php
+                //Handle fails and success condition messages
+                if($errorVal != ""){
+                    echo "<div class=\"alert alert-danger\" role=\"alert\">$errorVal</div>";
+                } 
+            ?>
+            <!--Form-->
             <form class="form-signin" method="post" action="login.php">
                 <label>Username: </label>
                 <input type="text" name="username" value="<?=$userVal?>"> <br>

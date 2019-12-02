@@ -11,10 +11,11 @@
     <title>Stack Underflow Admin Page</title>
 
     <?php
+        // Session Variables 
         session_start();
         require_once('dbfuncs/dbfunctions.php');
         require_once('dbfuncs/dblogin.php');
-        //Checking for user type to verify admin status or not
+        // Checking for logged in status as well as admin status. 
         if(isset($_SESSION['currentUserType'])){
             if ($_SESSION['currentUserType'] == "admin"){
                 $loggedin = true;
@@ -22,11 +23,13 @@
             } else if($_SESSION['currentUserType'] == "user") {
                 $loggedin = true;
                 $admin = false;
+                // if not an admin, redirect them to the main page
                 header("Location: main.php");
             }
         } else {
             $loggedin = false;
             $admin = false;
+            // if not logged in, redirect them to the main page
             header("Location: main.php");
         }
 
@@ -51,6 +54,7 @@
   </head>
   <body style="background-color: #bfc9ca">
     <div class="container-fullwidth sticky-top">
+        <!--NavBar-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="main.php">
             <img src="stackunderflow.png" width="30" height="30" alt="">Stack Underflow
@@ -76,7 +80,7 @@
                     Account
                     </a>
                     <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdownMenuLink\">
-                    <a class=\"dropdown-item\" href=\"#\">Edit Account</a>
+                    <a class=\"dropdown-item\" href=\"editaccount.php\">Edit Account</a>
                     <a class=\"dropdown-item\" href=\"admin_page.php\">Admin Page</a>
                     <a class=\"dropdown-item\" href=\"logout.php\">Log out</a>
                     </div>
@@ -92,20 +96,22 @@
         </nav>
     </div>
     <?php
-            $userVal = "";
+            // Code to pull username for respective buttons pressed that checks if the user exists in the database and throws errors if not.
+            $userVal = ""; 
             $errorVal = "";
-        	if(isset($_POST['ban'])){
+        	if(isset($_POST['ban'])){                   
                 if(isset($_POST['username'])){
-                    $username = $_POST['username'];
-                    $query = "SELECT status FROM users WHERE username = '$username'";
+                    $username = $_POST['username'];                  
+                    $query = "SELECT status FROM users WHERE username = '$username'";    
                     $result = $conn->query($query);
                     $resultArr = $result->fetch_array();
-                        if(!$resultArr){
-                            $errorVal = "That username does not exist";
-                            $userVal = $username;
+                        if(!$resultArr){                                                 
+                            $errorVal = "That username does not exist";                  
+                             $userVal = $username;
                         }else{
-                            if($resultArr['status'] == "user")
+                            if($resultArr['status'] == "user")                          
                                 {
+                                    // check status of user, if not banned, ban them, else if admin, set error, else they are already banned so set that error 
                                 $query = "UPDATE users SET status = 'banned' WHERE username = '$username'";
                                 $conn->query($query);
                                 $errorVal = "User has been Banned";
@@ -122,6 +128,7 @@
                         }
                 }
             }
+            // Code to pull username for respective buttons pressed that checks if the user exists in the database and throws errors if not.
             if(isset($_POST['unban'])){
                 if(isset($_POST['username'])){
                     $username = $_POST['username'];
@@ -132,7 +139,7 @@
                             $errorVal = "That username does not exist";
                             $userVal = $username;
                         }else{
-
+                                // checks status of user entered, if banned, un-ban them, else that user is not currently banned
                             if($resultArr['status'] == "banned")
                                 {
                                 $query = "UPDATE users SET status ='user' WHERE username = '$username'";
@@ -147,6 +154,7 @@
                         }
                 }
             }
+            // Code to pull username for respective buttons pressed that checks if the user exists in the database and throws errors if not.
             if(isset($_POST['add'])){
                 if(isset($_POST['username'])){
                     $username = $_POST['username'];
@@ -157,6 +165,7 @@
                             $errorVal = "That username does not exist";
                             $userVal = $username;
                         }else{
+                                // check status of user, if not already an admin, make them an admin, else throws error
                             if($resultArr['status'] == "user")
                                 {
                                 $query = "UPDATE users SET status = 'admin' WHERE username = '$username'";
@@ -172,6 +181,7 @@
                 }
             }
     ?>
+    <!-- html to control the form on this page, as well as the formating and layout of the buttons -->
     <form  method = "post" action = "admin_page.php" class = "text-center">
         <div class="text-center container" >
             <div class = "row">
@@ -181,25 +191,25 @@
             </div>
             <div class = "row">
                 <div class="form-group col-md-12 text-center">
-                    
+                                                <!--Userval used to repopulate the form continously -->
                         <input type="text" class="form-control" id="username" name= "username" value="<?=$userVal?>">
                     
                 </div>
             </div>
             <div class = "row">
                 <div class = "col-md-6">
-                    <button type="submit" name = "ban" id = "ban" class="btn btn-primary btn-block ">Submit Username to Ban</button>
+                    <button type="submit" name = "ban" id = "ban" class="btn btn-primary btn-block ">Submit Username to Ban</button> <!-- Ban Button -->
                 </div>
                 <div class = "col-md-6">
-                    <button type="submit" name = "unban" id = "unban" class="btn btn-primary btn-block">Submit Username to Un-Ban</button>
+                    <button type="submit" name = "unban" id = "unban" class="btn btn-primary btn-block">Submit Username to Un-Ban</button> <!-- Un-Ban Button -->
                 </div>
                 <div class = "col-md-12">
-                    <button type="submit" name = "add" id = "add" class="btn btn-primary btn-block mt-3">Promote User to Admin</button>
+                    <button type="submit" name = "add" id = "add" class="btn btn-primary btn-block mt-3">Promote User to Admin</button> <!-- Make Admin Button -->
                 </div>
             </div>
             <div class = "row">
                 <div class = "col-md-12 text-center">
-                    <p style="color: red" class = "text-center">
+                    <p style="color: red" class = "text-center">  <!-- Error Text to Display -->
                         <?=$errorVal?>
                     </p>
                 </div>

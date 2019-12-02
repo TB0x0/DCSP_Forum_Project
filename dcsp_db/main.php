@@ -32,7 +32,7 @@
 			if ($conn->connect_error)
                 die($conn->connect_error);
                 
-
+        //Hard coded categories
         $categories = array("Questions", "General", "Off-Topic");
     ?>
 
@@ -50,6 +50,7 @@
   </head>
   <body style="background-color: #bfc9ca">
     <div class="container-fullwidth sticky-top">
+        <!--NavBar-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">
             <img src="stackunderflow.png" width="30" height="30" alt="">Stack Underflow
@@ -75,7 +76,7 @@
                     Account
                     </a>
                     <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdownMenuLink\">
-                    <a class=\"dropdown-item\" href=\"#\">Edit Account</a>
+                    <a class=\"dropdown-item\" href=\"editaccount.php\">Edit Account</a>
                     <a class=\"dropdown-item\" href=\"logout.php\">Log out</a>
                     </div>
                     </li>";
@@ -85,7 +86,7 @@
                     Account
                     </a>
                     <div class=\"dropdown-menu\" aria-labelledby=\"navbarDropdownMenuLink\">
-                    <a class=\"dropdown-item\" href=\"#\">Edit Account</a>
+                    <a class=\"dropdown-item\" href=\"editaccount.php\">Edit Account</a>
                     <a class=\"dropdown-item\" href=\"admin_page.php\">Admin Page</a>
                     <a class=\"dropdown-item\" href=\"logout.php\">Log out</a>
                     </div>
@@ -110,13 +111,14 @@
         </form>
         </nav>
     </div>
-    
+    <!--Main-->
     <div class="container pt-5" style="background-color: #abb2b9">
         <div class="row">
             <div class="col-md-9">
                 <div class="container-fullwidth border border-dark border-3 p-3">
-
                     <?php
+                        //Display each category
+                        //Categories are links allowing user to view all posts in that category, on a seperate page
                         foreach($categories as $category){
                             echo "<div class=\"row border border-dark border-3 rounded pt-3 pb-3\" style=\"background-color: #171717\">
                             <div class=\"col-md-3\">
@@ -124,7 +126,7 @@
                             </div>
                             <div class=\"col-md-6\"></div>
                             <div class=\"col-md-3\">";
-                            
+                            //Count posts in the category and display the result
                             $query = "SELECT * FROM posts WHERE category = '$category'";
                             $result = $conn->query($query);
                             if($result){
@@ -136,12 +138,13 @@
                             }
                             
                                 
-
+                            //Get all posts in category, newest first
                             $query = "SELECT * FROM posts WHERE category = '$category' ORDER BY post_id DESC";
                             $result = $conn->query($query);
 
                             if($result){
                                 $tmpVal = 0;
+                                //Show only the newest 5 posts in the category
                                 while(($resultArr = $result->fetch_array()) && $tmpVal < 5){
                                     echo "<div class=\"row border border-dark border-3 rounded ml-3 mr-3 pt-3 pb-3\" style=\"background-color: #bbbbbb\">
                                     <div class=\"col-md-5 text-truncate\">";

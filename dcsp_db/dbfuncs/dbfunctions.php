@@ -6,6 +6,11 @@ function db_add_user($connection, $un, $st, $pw){
     $result = $connection->query($insert_into_users);
     if (!$result) die($connection->error);}
 
+function db_edit_password($connection, $un, $pw){
+    $update_password = "UPDATE users SET password = '".$pw."' WHERE username = '".$un."'";
+    $result = $connection->query($update_password);
+    if (!$result) die($connection->error);}
+
 function db_add_post($connection, $un, $pt, $cn, $ct){
     $insert_into_posts = "INSERT INTO posts (username, post_title, contents, category, time)"."VALUES('$un','$pt','$cn','$ct',UTC_TIMESTAMP)";
     $result = $connection->query($insert_into_posts);
